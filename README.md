@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./docs/images" width="500" height="140">
+<img src="./docs/images/ad-multitask.png" width="700" height="160">
 
 <h2 align="center">AI model deployment based on NVIDIA and Qualcomm platforms</h2>
 
