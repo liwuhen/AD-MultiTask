@@ -20,7 +20,7 @@
 ![Performance](https://img.shields.io/badge/Performance-Optimized-red?style=for-the-badge)
 ![GPU Accelerated](https://img.shields.io/badge/GPU-Accelerated-76B900?style=for-the-badge&logo=nvidia&logoColor=white)
 
-The repository mainly provides 2D model inference functionality, and the code provides daily development of packaged libs for integration, testing, and inference. The framework provides multi-threaded, singleton pattern, producer and consumer patterns. Cache log analysis is also supported.
+This repository primarily provides inference capabilities for multi-task networks in both 2D and 3D. It includes packaged libraries to support daily development, integration, testing, and inference. The framework implements multithreading, the singleton pattern, and producer-consumer patterns. It also supports cache log analysis.
 </div>
 
 # ![third-party](https://img.shields.io/badge/third-party-blue) Third-party Libraries
@@ -37,8 +37,12 @@ Visit our documentation to learn more.
 - [Supported Object Tracking](./docs/hpcdoc/source/algorithm/Supported_Object_Tracking.md)
 
 # Performances
-- Dataset: The validation dataset is TinyCOCO, which contains 1,000 training samples and 500 test samples. All models in the table were trained on the full COCO2017 dataset.
-- Model: The deployed model is the 's' version of the YOLO series.
+- Dataset: 
+    - BDD100K
+        > The validation dataset is BDD100K, which contains 70000 training samples and 10000 val samples. All models in the table were trained on the full BDD100K dataset.
+    - nuscenes
+        > The validation dataset is nuscenes-mini. All models in the table were trained on the full nuscenes dataset.
+- Model: The deployed model is the 's' version of the YOLO multi-task network series.
 - Quantize: Quantization was performed using NVIDIA's Post-Training Quantization (PTQ) method.
 
 |Model|Platform|Resolution|mAP50-95(fp32)|mAP50(fp32)|mAP50-95(fp16)|mAP50(fp16)|mAP50-95(int8)|mAP50(int8)|
@@ -50,6 +54,6 @@ Visit our documentation to learn more.
 Welcome users to participate in these projects. Please refer to [CONTRIBUTING.md](./CONTRIBUTING.md) for the contributing guideline.We encourage you to join the effort and contribute feedback, ideas, and code. You can participate in Working Groups, Working Groups have most of their discussions on [Slack](https://app.slack.com/client/T07U5CEEXCP/C07UKUA9TCJ) or QQ (938558640).
 
 # References
-- [Yolox: https://github.com/Megvii-BaseDetection/YOLOX](https://github.com/Megvii-BaseDetection/YOLOX)
-- [Ultralytics: https://github.com/ultralytics/ultralytics](https://github.com/ultralytics/ultralytics)
+- [YoloP: https://github.com/hustvl/YOLOP](https://github.com/hustvl/YOLOP)
+- [A-YOLOM: https://github.com/JiayuanWang-JW/YOLOv8-multi-task](https://github.com/JiayuanWang-JW/YOLOv8-multi-task)
 - [Setup Environment: https://zhuanlan.zhihu.com/p/818205320](https://zhuanlan.zhihu.com/p/818205320)
