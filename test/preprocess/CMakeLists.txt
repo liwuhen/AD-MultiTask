@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.10.2)
 project(${MODEL_FLAG}_project_exe)
 
 include_directories(
-  ${CMAKE_PATH}/modules/app_yolo
-  ${CMAKE_PATH}/modules/app_yolo/appinterface
-  ${CMAKE_PATH}/modules/app_yolo/architecture
+  ${CMAKE_PATH}/modules/app_multitask
+  ${CMAKE_PATH}/modules/app_multitask/appinterface
+  ${CMAKE_PATH}/modules/app_multitask/architecture
   ${CMAKE_PATH}/modules/benchmark
   ${CMAKE_PATH}/modules/benchmark/voc
   ${CMAKE_PATH}/modules/benchmark/coco

@@ -16,35 +16,46 @@
 * ===================================================================
 */
 
-#ifndef APP_COMMON_ENUM_MSG_H__
-#define APP_COMMON_ENUM_MSG_H__
+#ifndef APP_MULTITASK_DECODE_H__
+#define APP_MULTITASK_DECODE_H__
 
 #include <iostream>
 #include <memory>
 #include <mutex>
-#include <queue>
-#include <string>
+#include <unordered_map>
 
+#include "module_struct.h"
+#include "parseconfig.h"
+/**
+ * @namespace hpc::appinfer
+ * @brief hpc::appinfer
+ */
 namespace hpc {
-namespace common {
+namespace appinfer {
 
-typedef enum class batch_mode_ : uint8_t { STATIC_MODE = 0, DYNAMIC_MODE } BatchMode;
+using namespace std;
+using namespace hpc::common;
+/**
+ * @class DecodeModuleBase.
+ * @brief Model decode base.
+ */
+class DecodeModuleBase {
+ public:
+  DecodeModuleBase() {}
+  virtual ~DecodeModuleBase() = default;
 
-typedef enum class model_acc_ : uint8_t { MODEL_FLOAT32 = 0, MODEL_FLOAT16, MODEL_INT8 } ModelACC;
+  virtual bool Init() = 0;
 
-typedef enum class device_mode_ : uint8_t { GPU_MODE = 0, CPU_MODE } DeviceMode;
+  virtual bool RunStart() = 0;
 
-typedef enum class app_task_ : uint8_t { YOLOV5_MODE = 0, YOLOX_MODE } AppTask;
+  virtual bool RunStop() = 0;
 
-typedef enum class yolo_decode_ : uint8_t { FEATURE_LEVEL = 0, INPUT_LEVEL } DecodeType;
+  virtual bool RunRelease() = 0;
 
-typedef enum class yolo_decode_branch_ : uint8_t {
-    FEATURE_ONE = 0,
-    FEATURE_SECOND,
-    FEATURE_THREE
-} DecodeBranch;
+  virtual bool SetParam(shared_ptr<ParseMsgs>& parse_msgs) = 0;
+};
 
-}  // namespace common
+}  // namespace appinfer
 }  // namespace hpc
 
-#endif  // APP_COMMON_ENUM_MSG_H__
+#endif  // APP_MULTITASK_DECODE_H__
