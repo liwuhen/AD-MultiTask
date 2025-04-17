@@ -93,11 +93,11 @@ void ModelDecode::BboxDecodeFeatureLevel(std::vector<float*>& predict,
 
   vector<Box> boxes;
 
-  int l_size = parsemsgs_->branchs_dim_[0][1] * parsemsgs_->branchs_dim_[0][2] * parsemsgs_->branchs_dim_[0][3];
-  int d_size = parsemsgs_->branchs_dim_[1][1] * parsemsgs_->branchs_dim_[1][2] * parsemsgs_->branchs_dim_[1][3];
-  int s_size = parsemsgs_->branchs_dim_[2][1] * parsemsgs_->branchs_dim_[2][2] * parsemsgs_->branchs_dim_[2][3];
+  int l_size = parsemsgs_->det_branchs_dim_[0][1] * parsemsgs_->det_branchs_dim_[0][2] * parsemsgs_->det_branchs_dim_[0][3];
+  int d_size = parsemsgs_->det_branchs_dim_[1][1] * parsemsgs_->det_branchs_dim_[1][2] * parsemsgs_->det_branchs_dim_[1][3];
+  int s_size = parsemsgs_->det_branchs_dim_[2][1] * parsemsgs_->det_branchs_dim_[2][2] * parsemsgs_->det_branchs_dim_[2][3];
 
-  int predict_outs = parsemsgs_->predict_dim_[0][1];
+  int predict_outs = parsemsgs_->det_predict_dim_[0][1];
   for (int i = 0; i < predict_outs; ++i)
   {
     // cal anchor point
@@ -116,10 +116,10 @@ void ModelDecode::BboxDecodeFeatureLevel(std::vector<float*>& predict,
     }
 
     std::vector<float*> outvec;
-    int label_num = parsemsgs_->predict_dim_[0][2] - 5;
+    int label_num = parsemsgs_->det_predict_dim_[0][2] - 5;
     if (parsemsgs_->branch_num_ == (int)DecodeBranch::FEATURE_THREE) {
       for (int j = 0; j < parsemsgs_->branch_num_; j++) {
-        outvec.push_back(predict[j] + i * parsemsgs_->predict_dim_[j][2]);  // cls score boxes 特征图级别
+        outvec.push_back(predict[j] + i * parsemsgs_->det_predict_dim_[j][2]);  // cls score boxes 特征图级别
       }
 
       label   = std::max_element(outvec[0], outvec[0] + label_num) - outvec[0];
@@ -133,7 +133,7 @@ void ModelDecode::BboxDecodeFeatureLevel(std::vector<float*>& predict,
       height = exp(outvec[2][3]) * stride;  // anchor free
 
     } else if (parsemsgs_->branch_num_ == (int)DecodeBranch::FEATURE_ONE) {
-      outvec.push_back(predict[0] + i * parsemsgs_->predict_dim_[0][2]);  // boxes infos 特征图级别
+      outvec.push_back(predict[0] + i * parsemsgs_->det_predict_dim_[0][2]);  // boxes infos 特征图级别
 
       float* lable_score = outvec[0] + 5;
       label   = std::max_element(lable_score, lable_score + label_num) - lable_score;
@@ -174,10 +174,10 @@ void ModelDecode::BboxDecodeInputLevel(std::vector<float*>& predict,
     InfertMsg& infer_msg, vector<Box>& box_result) {
 
   vector<Box> boxes;
-  int num_classes = parsemsgs_->predict_dim_[0][2] - 5;
-  for (int i = 0; i < parsemsgs_->predict_dim_[0][1]; ++i)
+  int num_classes = parsemsgs_->det_predict_dim_[0][2] - 5;
+  for (int i = 0; i < parsemsgs_->det_predict_dim_[0][1]; ++i)
   {
-    float* pitem  = predict[0] + i * parsemsgs_->predict_dim_[0][2];
+    float* pitem  = predict[0] + i * parsemsgs_->det_predict_dim_[0][2];
     float* pclass = pitem + 5;
 
     float objitem = pitem[4];

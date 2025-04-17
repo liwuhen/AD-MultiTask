@@ -98,8 +98,10 @@ class AppConfig {
   REG_YAML_VAR(std::string, calib_preprocess_type_);
 
 
-  REG_YAML_VAR(std::vector<std::vector<int>>, predict_dim_);
-  REG_YAML_VAR(std::vector<std::vector<int>>, branchs_dim_);
+  REG_YAML_VAR(std::vector<std::vector<int>>, det_predict_dim_);
+  REG_YAML_VAR(std::vector<std::vector<int>>, det_branchs_dim_);
+  REG_YAML_VAR(std::vector<std::vector<int>>, segda_predict_dim_);
+  REG_YAML_VAR(std::vector<std::vector<int>>, segll_predict_dim_);
 
  protected:
   explicit AppConfig(const std::string& config_filename);

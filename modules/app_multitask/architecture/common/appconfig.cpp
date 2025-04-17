@@ -57,8 +57,10 @@ std::string AppConfig::postprocess_type_;
 std::string AppConfig::calib_table_path_;
 std::string AppConfig::calib_preprocess_type_;
 
-std::vector<std::vector<int>> AppConfig::predict_dim_;
-std::vector<std::vector<int>> AppConfig::branchs_dim_;
+std::vector<std::vector<int>> AppConfig::det_predict_dim_;
+std::vector<std::vector<int>> AppConfig::det_branchs_dim_;
+std::vector<std::vector<int>> AppConfig::segda_predict_dim_;
+std::vector<std::vector<int>> AppConfig::segll_predict_dim_;
 
 YAML::Node& AppConfig::getYamlNode() { return yaml_node_; }
 
@@ -131,12 +133,20 @@ AppConfig::AppConfig(const std::string& config_filename) : config_filename_(conf
   preprocess_type_  = yaml_node_["model_config"]["preprocess_type"].as<std::string>();
   postprocess_type_ = yaml_node_["model_config"]["postprocess_type"].as<std::string>();
 
-  for (int index = 0; index < yaml_node_["predict_config"]["predict_dim"].size(); index++) {
-    predict_dim_.push_back(yaml_node_["predict_config"]["predict_dim"][index].as<std::vector<int>>());
+  for (int index = 0; index < yaml_node_["predict_config"]["det_predict_dim"].size(); index++) {
+    det_predict_dim_.push_back(yaml_node_["predict_config"]["det_predict_dim"][index].as<std::vector<int>>());
   }
 
-  for (int index = 0; index < yaml_node_["predict_config"]["branchs_dim"].size(); index++) {
-    branchs_dim_.push_back(yaml_node_["predict_config"]["branchs_dim"][index].as<std::vector<int>>());
+  for (int index = 0; index < yaml_node_["predict_config"]["det_branchs_dim"].size(); index++) {
+    det_branchs_dim_.push_back(yaml_node_["predict_config"]["det_branchs_dim"][index].as<std::vector<int>>());
+  }
+
+  for (int index = 0; index < yaml_node_["predict_config"]["segda_predict_dim"].size(); index++) {
+    segda_predict_dim_.push_back(yaml_node_["predict_config"]["segda_predict_dim"][index].as<std::vector<int>>());
+  }
+
+  for (int index = 0; index < yaml_node_["predict_config"]["segll_predict_dim"].size(); index++) {
+    segll_predict_dim_.push_back(yaml_node_["predict_config"]["segll_predict_dim"][index].as<std::vector<int>>());
   }
 
   if (trt_path_ == "") {

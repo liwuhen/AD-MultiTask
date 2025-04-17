@@ -29,7 +29,7 @@ static __global__ void warp_affine_bilinear_kernel(uint8_t* src, int batch, int 
                                                    int src_width, int src_height, float* dst,
                                                    int dst_width, int dst_height,
                                                    Matrix3f affineMatrix_inv,
-                                                   uint8_t const_value_st, AppYolo app_mode) {
+                                                   uint8_t const_value_st, AppTask app_mode) {
   int dx = blockDim.x * blockIdx.x + threadIdx.x;
   int dy = blockDim.y * blockIdx.y + threadIdx.y;
   int k  = blockDim.z * blockIdx.z + threadIdx.z;
@@ -85,7 +85,7 @@ static __global__ void warp_affine_bilinear_kernel(uint8_t* src, int batch, int 
 
   int area = dst_width * dst_height;
 
-  if (app_mode == AppYolo::YOLOV5_MODE) {
+  if (app_mode == AppTask::YOLOP_MODE) {
     // normalisation
     c0 = (c0 / 255.0f);
     c1 = (c1 / 255.0f);
@@ -98,7 +98,7 @@ static __global__ void warp_affine_bilinear_kernel(uint8_t* src, int batch, int 
     *pdst_r = c0;
     *pdst_g = c1;
     *pdst_b = c2;
-  } else if (app_mode == AppYolo::YOLOX_MODE) {
+  } else if (app_mode == AppTask::A_YOLOM_MODE) {
     // bgr to rgb && HWC to CHW
     float* pdst_b = dsts + area * 0 + dy * dst_width + dx;
     float* pdst_g = dsts + area * 1 + dy * dst_width + dx;
@@ -111,7 +111,7 @@ static __global__ void warp_affine_bilinear_kernel(uint8_t* src, int batch, int 
 
 void warp_affine_bilinear(uint8_t* src, int batch, InfertMsg& input_msg, float* dst, int dst_width,
                           int dst_height, uint8_t const_value, cudaStream_t stream,
-                          AppYolo app_mode) {
+                          AppTask app_mode) {
   dim3 block_size(16, 16, 4);  // blocksize最大就是1024
   dim3 grid_size((dst_width + 15) / 16, (dst_height + 15) / 16, (batch + 3) / 4);
 

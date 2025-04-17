@@ -44,8 +44,8 @@ void ParseMsgs::ReadYamlParam() {
   batch_mode_     = app_config->get_batch_mode_();
   branch_num_     = app_config->get_branch_num_();
   batchsizes_     = app_config->get_batchsizes_();
-  branchs_dim_    = app_config->get_branchs_dim_();
-  predict_dim_    = app_config->get_predict_dim_();
+  det_branchs_dim_= app_config->get_det_branchs_dim_();
+  det_predict_dim_= app_config->get_det_predict_dim_();
   decode_type_    = app_config->get_decode_type_();
   max_objects_    = app_config->get_max_objects_();
   quantize_data_  = app_config->get_quantize_data_();
@@ -63,6 +63,9 @@ void ParseMsgs::ReadYamlParam() {
   onnx_path_      = app_config->get_home_path_() + app_config->get_onnx_path_();
   predict_path_   = app_config->get_home_path_() + app_config->get_predict_path_();
   log_path_       = app_config->get_home_path_() + app_config->get_log_path_();
+
+  segda_predict_dim_ = app_config->get_segda_predict_dim_();
+  segll_predict_dim_ = app_config->get_segll_predict_dim_();
 
   postprocess_type_      = app_config->get_postprocess_type_();
   calib_table_path_      = app_config->get_calib_table_path_();

@@ -99,8 +99,10 @@ class ParseMsgs {
   std::string calib_table_path_;      // Calib table path
   std::string calib_preprocess_type_; // Calib preprocess type
 
-  std::vector<std::vector<int>> predict_dim_;  // Model prediction output dimensions
-  std::vector<std::vector<int>> branchs_dim_;
+  std::vector<std::vector<int>> det_predict_dim_;    // Model prediction det output dimensions
+  std::vector<std::vector<int>> det_branchs_dim_;
+  std::vector<std::vector<int>> segda_predict_dim_;  // Model prediction seg drivable output dimensions
+  std::vector<std::vector<int>> segll_predict_dim_;  // Model prediction seg lane output dimensions
 };
 
 }  // namespace common

@@ -40,6 +40,7 @@
 #include "parseconfig.h"
 #include "plugin.h"
 #include "std_buffer.h"
+#include "enum_msg.h"
 #include "task_struct.hpp"
 #include "decode_registry.hpp"
 
@@ -115,11 +116,27 @@ class DecodeProcessor : public InferModuleBase {
   bool DataResourceRelease();
 
   /**
-   * @brief     Visualization.
+   * @brief     Visualization Det.
+   * @param[in] [cv::Mat&, vector<Box>&].
+   * @return    void.
+   */
+  void VisualizationDet(cv::Mat& img, vector<Box>& results);
+
+  /**
+   * @brief     Visualization seg.
+   * @param[in] [cv::Mat&, vector<Box>&].
+   * @return    void.
+   */
+  void VisualizationSeg(cv::Mat& img, 
+    SegTask segmode, vector<uint8_t>& mask);
+
+  /**
+   * @brief     Visualization multi task.
    * @param[in] [bool, cv::Mat&, int64_t, vector<Box>&].
    * @return    void.
    */
-  void Visualization(bool real_time, cv::Mat& img, int64_t timestamp, vector<Box>& results);
+  void VisualizationMultiTask(bool real_time, 
+    cv::Mat& img, int64_t timestamp, MultiTaskMsg& multitask_result);
 
   /**
    * @brief     clamp．
@@ -146,7 +163,7 @@ class DecodeProcessor : public InferModuleBase {
    * @return    void.
    */
   void Decode(std::vector<float*>& predict,
-      InfertMsg& infer_msg, vector<Box>& box_result);
+      InfertMsg& infer_msg, MultiTaskMsg& multitask_result);
 
  private:
   std::atomic<bool> running_;

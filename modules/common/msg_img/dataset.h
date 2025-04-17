@@ -34,6 +34,9 @@ namespace hpc {
 
 namespace common {
 
+// bdd100k ddataset
+static const char* bdd1ooklabels[] = {"vehicle", "drivable", "lane"};
+
 // voc dataset
 static const char* voclabels[] = {"aeroplane", "bicycle", "bird",
                                   "boat", "bottle", "bus",
@@ -126,6 +129,10 @@ static std::tuple<uint8_t, uint8_t, uint8_t> random_color(int id) {
   float s_plane = ((((unsigned int)id << 3) ^ 0x315793) % 100) / 100.0f;
   return hsv2bgr(h_plane, s_plane, 1);
 }
+
+static std::vector<std::vector<int>> selectColor = { 
+    { 0, 0, 0 }, { 0, 255, 0 }, { 255, 0, 0 }, { 0, 255, 255 } 
+};
 
 }  // namespace common
 }  // namespace hpc

@@ -47,6 +47,6 @@ static dim3 block_dims(int numJobs) {
 }
 
 void warp_affine_bilinear(uint8_t* src, int batch, InfertMsg& input_msg, float* dst, int dst_width,
-                          int dst_height, uint8_t const_value, cudaStream_t stream, AppYolo mode);
+                          int dst_height, uint8_t const_value, cudaStream_t stream, AppTask mode);
 
 #endif  // APP_MULTITASK_WARPAFFINE_H__

@@ -57,7 +57,8 @@ struct InfertMsg {
   InfertMsg() :
     width(0), height(0), index(0), frame_id(0), timestamp(0), img_size(0) {
       this->image = cv::Mat();
-      this->affineMatrix_cv = cv::Mat(2, 3, CV_32F);
+      this->affineMatrix_cv     = cv::Mat(2, 3, CV_32F);
+      this->affineMatrix_inv_cv = cv::Mat(2, 3, CV_32F);
     }
 
   InfertMsg operator=(const InfertMsg& obj) {
@@ -69,8 +70,10 @@ struct InfertMsg {
     this->timestamp = obj.timestamp;
     this->image     = obj.image.clone();
     this->affineVec = obj.affineVec;
-    this->affineMatrix = obj.affineMatrix;
-    this->affineMatrix_inv = obj.affineMatrix_inv;
+    this->affineMatrix        = obj.affineMatrix;
+    this->affineMatrix_inv    = obj.affineMatrix_inv;
+    this->affineMatrix_cv     = obj.affineMatrix_cv;
+    this->affineMatrix_inv_cv = obj.affineMatrix_inv_cv;
 
     for (auto& box : obj.bboxes) {
       this->bboxes.emplace_back(box);
@@ -87,11 +90,30 @@ struct InfertMsg {
   int64_t timestamp;
   cv::Mat image;
   cv::Mat affineMatrix_cv;
+  cv::Mat affineMatrix_inv_cv;
   std::vector<Box> bboxes;
   Eigen::Vector2f affineVec = Eigen::Vector2f::Zero();
   Eigen::Matrix3f affineMatrix = Eigen::Matrix3f::Identity();
   Eigen::Matrix3f affineMatrix_inv = Eigen::Matrix3f::Identity();
 };
+
+
+struct MultiTaskMsg {
+  std::vector<Box> box_result;
+  std::vector<uint8_t> seg_drivable;
+  std::vector<uint8_t> seg_lane;
+
+  MultiTaskMsg operator=(const MultiTaskMsg& obj) {
+    this->seg_drivable = obj.seg_drivable;
+    this->seg_lane     = obj.seg_lane;
+    for (auto& box : obj.box_result) {
+      this->box_result.emplace_back(box);
+    }
+    return *this;
+  }
+};
+
+
 
 // 自定义图像，去除opencv
 struct CVImage {

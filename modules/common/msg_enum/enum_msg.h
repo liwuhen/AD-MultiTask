@@ -34,9 +34,11 @@ typedef enum class model_acc_ : uint8_t { MODEL_FLOAT32 = 0, MODEL_FLOAT16, MODE
 
 typedef enum class device_mode_ : uint8_t { GPU_MODE = 0, CPU_MODE } DeviceMode;
 
-typedef enum class app_task_ : uint8_t { YOLOV5_MODE = 0, YOLOX_MODE } AppTask;
+typedef enum class app_task_ : uint8_t { YOLOP_MODE = 0, A_YOLOM_MODE } AppTask;
 
 typedef enum class yolo_decode_ : uint8_t { FEATURE_LEVEL = 0, INPUT_LEVEL } DecodeType;
+
+typedef enum class seg_task_ : uint8_t { SEG_DRIVABLE = 0, SEG_LANE } SegTask;
 
 typedef enum class yolo_decode_branch_ : uint8_t {
     FEATURE_ONE = 0,

@@ -1,0 +1,48 @@
+common_config:
+  log_path: /workspace/log/
+  model_name: a_yolom
+  max_batchsize: 16
+  quantize_flag: false   # begin PTQ
+  quantize_data: /home/selflearning/dataset/tinycoco/images/calib_data_100
+  calib_table_path: /home/selflearning/opensource/HPC_Deploy/install_nvidia/yolov8_bin/x86/config/model/calibratorfile.cache
+  calib_batchsize: 1
+  calib_preprocess_type: pre_a_yolom_cpu_calib
+
+model_config:
+  multitask_type: [det, seg_drivable, seg_lane]
+  preprocess_type: pre_a_yolom_cpu
+  postprocess_type: post_a_yolom_cpu_anchorfree
+  nms_type: nms
+
+inference_config:
+  model_acc: 0     # 0-fp32, 1-fp16, 2-int8
+  infer_mode: 1    # 0-gpu, 1-cpu, 2-npu
+  batch_mode: 1    # 0-static batch, 1-dynamic batch
+  input_msgdepth: 1000
+  decode_msgdepth: 1000
+  onnx_path: /config/model/a_yolom_bdd100k.onnx
+  engine_path: /config/model/a_yolom_fp32_bdd100k.trt
+  predict_path: /config/model/predict.data
+  offline_test:
+    img_path: /config/data/bdd100k/car.jpg
+    save_img: /workspace/image
+
+preprocessor_config:
+  batch_size: 1
+  src_img_width: 1280
+  src_img_height: 720
+  src_img_channel: 3
+  dst_img_width: 640
+  dst_img_height: 640
+  dst_img_channel: 3
+
+predict_config:
+  decode_type: 1
+  branch_num: 3
+  det_predict_dim: [[1, 8400, 5]]
+  det_branchs_dim: [[1, 1, 80, 80],[1, 1, 40, 40],[1, 1, 20, 20]] 
+  segda_predict_dim: [[1, 1, 640, 640]]  # seg drivable
+  segll_predict_dim: [[1, 1, 640, 640]]  # seg lane
+  max_objects: 0
+  obj_threshold: 0.25
+  nms_threshold: 0.45
