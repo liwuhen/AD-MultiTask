@@ -63,18 +63,12 @@ echo -e "\e[1m\e[34m[Bash-Compiler-${TIME}]: Building.... \e[0m"
 
 LIB_PATH=""
 APP_PATH=""
-if [ "${MODEL_FLAG}" == "yolov5"  ]; then
+if [ "${MODEL_FLAG}" == "yolop"  ]; then
     LIB_PATH=app_multitask
-    APP_PATH=yolov5
-elif [ "${MODEL_FLAG}" == "yolov8" ]; then
+    APP_PATH=yolop
+elif [ "${MODEL_FLAG}" == "a_yolom" ]; then
     LIB_PATH=app_multitask
-    APP_PATH=yolov8
-elif [ "${MODEL_FLAG}" == "yolov11" ]; then
-    LIB_PATH=app_multitask
-    APP_PATH=yolov11
-elif [ "${MODEL_FLAG}" == "yolox" ]; then
-    LIB_PATH=app_multitask
-    APP_PATH=yolox
+    APP_PATH=a_yolom
 fi
 
 # compiler
