@@ -32,17 +32,17 @@ preprocessor_config:
   src_img_width: 1280
   src_img_height: 720
   src_img_channel: 3
-  dst_img_width: 640
-  dst_img_height: 640
+  dst_img_width: 672
+  dst_img_height: 384
   dst_img_channel: 3
 
 predict_config:
   decode_type: 1
   branch_num: 3
-  det_predict_dim: [[1, 8400, 5]]
-  det_branchs_dim: [[1, 1, 80, 80],[1, 1, 40, 40],[1, 1, 20, 20]] 
-  segda_predict_dim: [[1, 1, 640, 640]]  # seg drivable
-  segll_predict_dim: [[1, 1, 640, 640]]  # seg lane
+  det_predict_dim: [[1, 5292, 5]]
+  det_branchs_dim: [[1, 1, 48, 84],[1, 1, 24, 42],[1, 1, 12, 21]] 
+  segda_predict_dim: [[1, 1, 384, 672]]  # seg drivable
+  segll_predict_dim: [[1, 1, 384, 672]]  # seg lane
   max_objects: 0
   obj_threshold: 0.25
   nms_threshold: 0.45
