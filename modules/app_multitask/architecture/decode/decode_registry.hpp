@@ -22,6 +22,7 @@
 #include "logger.h"
 #include "parseconfig.h"
 #include "nms_registry.hpp"
+#include "gpu_seg.hpp"
 
 namespace hpc {
 
@@ -91,7 +92,6 @@ inline void AYoloMSegCpuAchorFree(
     std::shared_ptr<ParseMsgs>& parsemsgs) {
     
     // seg drivable && lane
-    // TODO: CUDA 
     auto seg_drivable_data = reinterpret_cast<uint32_t*>(predict[0]);
     auto seg_lane_data     = reinterpret_cast<uint32_t*>(predict[1]);
     seg_lane.resize((infer_msg.height * infer_msg.width) - 1, 0);
@@ -116,6 +116,71 @@ inline void AYoloMSegCpuAchorFree(
 }
 
 /**
+ * @description: A-YOLOM det gpu.
+ */
+inline void AYoloMDetectGpuAchorFree(
+    InfertMsg& infer_msg,
+    std::vector<Box>& box_result,
+    std::vector<float*>& predict,
+    std::shared_ptr<ParseMsgs>& parsemsgs) {
+    
+    vector<Box> boxes;
+    int num_classes = parsemsgs->det_predict_dim_[0][2] - 4;
+    for (int i = 0; i < parsemsgs->det_predict_dim_[0][1]; ++i)
+    {
+        float* pitem  = predict[2] + i * parsemsgs->det_predict_dim_[0][2];
+        float* pclass = pitem + 4;
+
+        int label  = std::max_element(pclass, pclass + num_classes) - pclass;
+        float prob = pclass[label];
+        float confidence = prob;    // anchor free
+        if (confidence < parsemsgs->obj_threshold_) continue;
+
+        float cx     = pitem[0];
+        float cy     = pitem[1];
+        float width  = pitem[2];
+        float height = pitem[3];
+        float left   = cx - width  * 0.5;
+        float top    = cy - height * 0.5;
+        float right  = cx + width  * 0.5;
+        float bottom = cy + height * 0.5;
+
+        // 输入图像层级模型预测框 ==> 映射回原图上尺寸
+        float image_left   = infer_msg.affineMatrix_inv(0, 0) * (left   - infer_msg.affineVec(0)) \
+                            + infer_msg.affineMatrix_inv(0, 2);
+        float image_top    = infer_msg.affineMatrix_inv(1, 1) * (top    - infer_msg.affineVec(1)) \
+                            + infer_msg.affineMatrix_inv(1, 2);
+        float image_right  = infer_msg.affineMatrix_inv(0, 0) * (right  - infer_msg.affineVec(0)) \
+                            + infer_msg.affineMatrix_inv(0, 2);
+        float image_bottom = infer_msg.affineMatrix_inv(1, 1) * (bottom - infer_msg.affineVec(1)) \
+                            + infer_msg.affineMatrix_inv(1, 2);
+
+        if ( image_left < 0 || image_top< 0 ) {
+            continue;
+        }
+
+        boxes.emplace_back(image_left, image_top, image_right, image_bottom, confidence, label);
+    }
+
+    auto nms = Registry::getInstance()->getRegisterFunc<float,
+                std::vector<Box>&, std::vector<Box>&>(parsemsgs->nms_type_);
+
+    nms(parsemsgs->nms_threshold_, boxes, box_result);
+}
+
+/**
+ * @description: A-YOLOM seg gpu.
+ */
+inline void AYoloMSegGpuAchorFree(
+    InfertMsg& infer_msg,
+    std::vector<float*>& predict,
+    std::vector<uint8_t*>& seg_data_device,
+    std::shared_ptr<ParseMsgs>& parsemsgs) {
+
+    SemanticSeg(infer_msg, predict, seg_data_device, parsemsgs);
+}
+
+/**
  * @description: A-YOLOM cpu postprocess anchor free.
  */
 inline void PostprocessAYoloMCpuAchorFree(
@@ -131,9 +196,25 @@ inline void PostprocessAYoloMCpuAchorFree(
     AYoloMSegCpuAchorFree(infer_msg, multitask_result.seg_lane, multitask_result.seg_drivable, predict, parsemsgs);
 }
 
+/**
+ * @description: A-YOLOM gpu postprocess anchor free.
+ */
+inline void PostprocessAYoloMGpuAchorFree(
+    InfertMsg& infer_msg,
+    std::vector<float*>& predict,
+    std::vector<uint8_t*>& seg_data_device,
+    std::shared_ptr<ParseMsgs>& parsemsgs) {
+
+    // bbox decode
+    // AYoloMDetectGpuAchorFree(infer_msg, multitask_result.box_result, predict, parsemsgs);
+
+    // seg decode
+    AYoloMSegGpuAchorFree(infer_msg, predict, seg_data_device, parsemsgs);
+}
 
 // 全局自动注册
 REGISTER_CALIBRATOR_FUNC("post_a_yolom_cpu_anchorfree", PostprocessAYoloMCpuAchorFree);
+REGISTER_CALIBRATOR_FUNC("post_a_yolom_gpu_anchorfree", PostprocessAYoloMGpuAchorFree);
 
 }  // namespace appinfer
 }  // namespace hpc

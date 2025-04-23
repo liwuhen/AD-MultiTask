@@ -10,13 +10,13 @@ common_config:
 
 model_config:
   multitask_type: [det, seg_drivable, seg_lane]
-  preprocess_type: pre_a_yolom_cpu
-  postprocess_type: post_a_yolom_cpu_anchorfree
+  preprocess_type: pre_a_yolom_gpu
+  postprocess_type: post_a_yolom_gpu_anchorfree
   nms_type: nms
 
 inference_config:
   model_acc: 0     # 0-fp32, 1-fp16, 2-int8
-  infer_mode: 1    # 0-gpu, 1-cpu, 2-npu
+  infer_mode: 0    # 0-gpu, 1-cpu, 2-npu
   batch_mode: 1    # 0-static batch, 1-dynamic batch
   input_msgdepth: 1000
   decode_msgdepth: 1000

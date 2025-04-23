@@ -167,12 +167,12 @@ class TrtInfer : public InferModuleBase {
   bool MemAllocator();
 
  public:
-  std::vector<float *> cpu_buffers_;
+  std::vector<float *> output_buffers_;
 
  private:
   bool hasEntropyCalibrator_;
 
-  std::vector<float *> gpu_buffers_;
+  std::vector<float *> input_buffers_;
 
   cudaStream_t stream_;
   std::map<std::string, int> in_out_size_;

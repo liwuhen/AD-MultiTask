@@ -30,6 +30,9 @@ DecodeProcessor::~DecodeProcessor() {}
  * @description: init．
  */
 bool DecodeProcessor::Init() {
+
+  input_size_ = parsemsgs_->src_img_w_ * parsemsgs_->src_img_h_;
+  MemAllocator();
   GLOG_INFO("[Init]: DecodeProcessor module init ");
   return true;
 }
@@ -90,7 +93,19 @@ bool DecodeProcessor::Inference(std::vector<float*>& predict,
   imgshape_["src"] = make_pair(infer_msg.height, infer_msg.width);
 
   MultiTaskMsg multitask_result;
+  size_t img_size = infer_msg.height * infer_msg.width;
+  multitask_result.seg_lane.resize(img_size, 0);
+  multitask_result.seg_drivable.resize(img_size, 0);
+
+  ResetMemory();
+
   Decode(predict, infer_msg, multitask_result);
+
+  // Copy results back to host
+  checkRuntime(cudaMemcpy(multitask_result.seg_lane.data(), seg_data_device_[0], \
+               multitask_result.seg_lane.size() * sizeof(uint8_t), cudaMemcpyDeviceToHost));
+  checkRuntime(cudaMemcpy(multitask_result.seg_drivable.data(), seg_data_device_[1],\
+               multitask_result.seg_drivable.size() * sizeof(uint8_t), cudaMemcpyDeviceToHost));
 
   InfertMsg msg;
   msg = infer_msg;
@@ -203,9 +218,43 @@ void DecodeProcessor::ScaleBoxes(vector<Box>& box_result) {
 void DecodeProcessor::Decode(std::vector<float*>& predict,
     InfertMsg& infer_msg, MultiTaskMsg& multitask_result) {
 
-  auto postprocess = Registry::getInstance()->getRegisterFunc<InfertMsg&, MultiTaskMsg&,
-                      std::vector<float*>&, std::shared_ptr<ParseMsgs>&>(parsemsgs_->postprocess_type_);
-  postprocess(infer_msg, multitask_result, predict, parsemsgs_);
+  auto postprocess = Registry::getInstance()->getRegisterFunc<InfertMsg&, std::vector<float*>&,
+                     std::vector<uint8_t*>&, std::shared_ptr<ParseMsgs>&>(parsemsgs_->postprocess_type_);
+  postprocess(infer_msg, predict, seg_data_device_, parsemsgs_);
+}
+
+/**
+ * @description: Memory allocator.
+ */
+bool DecodeProcessor::MemAllocator() {
+  seg_data_device_.resize(2);
+  
+  for ( int ind = 0; ind < 2; ind++ ) {
+    checkRuntime(cudaMalloc(&seg_data_device_[ind], sizeof(uint8_t) * input_size_));
+    checkRuntime(cudaMemset(seg_data_device_[ind], 0, input_size_ * sizeof(uint8_t))); // 初始化设备内存为0
+  }
+
+  return true;
+}
+
+/**
+ * @description: Reset memory.
+ */
+bool DecodeProcessor::ResetMemory() {
+  for ( int ind = 0; ind < 2; ind++ ) {
+    checkRuntime(cudaMemset(seg_data_device_[ind], 0, input_size_ * sizeof(uint8_t))); // 初始化设备内存为0
+  }
+}
+
+/**
+ * @description: Cpu and gpu memory free.
+ */
+bool DecodeProcessor::MemFree() {
+  for ( int ind = 0; ind < 2; ind++ ) {
+    checkRuntime(cudaFree(seg_data_device_[ind]));
+    seg_data_device_[ind] = nullptr;
+  }
+  return true;
 }
 
 

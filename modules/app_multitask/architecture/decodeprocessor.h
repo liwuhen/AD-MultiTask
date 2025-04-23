@@ -41,6 +41,7 @@
 #include "plugin.h"
 #include "std_buffer.h"
 #include "enum_msg.h"
+#include "utils.hpp"
 #include "task_struct.hpp"
 #include "decode_registry.hpp"
 
@@ -100,6 +101,13 @@ class DecodeProcessor : public InferModuleBase {
   bool SetParam(shared_ptr<ParseMsgs>& parse_msgs) override;
 
   /**
+   * @brief     Cpu and gpu memory free.
+   * @param[in] void.
+   * @return    bool.
+   */
+  bool MemFree();
+
+  /**
    * @brief     Inference.
    * @param[in] [float*, InfertMsg&, std::shared_ptr<InferMsgQue>&].
    * @return    bool.
@@ -151,6 +159,20 @@ class DecodeProcessor : public InferModuleBase {
   }
 
   /**
+   * @brief     Memory allocator.
+   * @param[in] void．
+   * @return    bool.
+   */
+  bool MemAllocator();
+
+  /**
+   * @brief     Reset Memory.
+   * @param[in] void．
+   * @return    bool.
+   */
+  bool ResetMemory();
+
+  /**
    * @brief     Bbox mapping to original map scale.
    * @param[in] [vector<Box>&, std::map<string, pair<int, int>>&]．
    * @return    void.
@@ -166,9 +188,12 @@ class DecodeProcessor : public InferModuleBase {
       InfertMsg& infer_msg, MultiTaskMsg& multitask_result);
 
  private:
+  size_t input_size_;
   std::atomic<bool> running_;
 
   InfertMsg output_msg_;
+
+  std::vector<uint8_t *> seg_data_device_;
 
   shared_ptr<ParseMsgs> parsemsgs_;
 

@@ -67,6 +67,9 @@ cuda_add_library(${MODEL_FLAG}_gpu_proprecessor SHARED
 cuda_add_library(${MODEL_FLAG}_gpu_decode SHARED
                  ${PROJECT_SOURCE_DIR}/architecture/cuda/gpu_decode.cu)
 
+cuda_add_library(${MODEL_FLAG}_gpu_decode_seg SHARED
+                 ${PROJECT_SOURCE_DIR}/architecture/cuda/gpu_seg.cu)
+
 set_target_properties(
   ${MODEL_FLAG}_gpu_proprecessor
   PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${PROCESSOR_OUTPUT_DIR}"
@@ -80,7 +83,7 @@ set_target_properties(
 add_library(${PROJECT_NAME} SHARED ${CPP_SRCS})
 
 target_link_libraries(${PROJECT_NAME} nvinfer nvinfer_plugin nvonnxparser)
-target_link_libraries(${PROJECT_NAME} ${MODEL_FLAG}_gpu_proprecessor)
+target_link_libraries(${PROJECT_NAME} ${MODEL_FLAG}_gpu_proprecessor ${MODEL_FLAG}_gpu_decode_seg)
 target_link_libraries(${PROJECT_NAME} yaml-cpp ${EIGIN_DIR})
 target_link_libraries(${PROJECT_NAME} opencv_core opencv_imgcodecs
                       opencv_imgproc opencv_highgui)

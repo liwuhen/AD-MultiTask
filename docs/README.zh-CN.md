@@ -9,7 +9,7 @@
 
 <p align="right">
   🌐 <b>Language</b> | 语言：
-  <a href="README.md">🇺🇸 English</a>
+  <a href="../README.md">🇺🇸 English</a>
 </p>
 
 ---

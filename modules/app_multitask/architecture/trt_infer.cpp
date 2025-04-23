@@ -104,24 +104,30 @@ bool TrtInfer::DataResourceRelease() {}
  * @description: Inference.
  */
 bool TrtInfer::Inference(float* output_img_device) {
-  checkRuntime(cudaMemcpy(gpu_buffers_[engine_name_size_[binding_names_["input"][0]].first],\
+  checkRuntime(cudaMemcpy(input_buffers_[engine_name_size_[binding_names_["input"][0]].first],\
       output_img_device, parsemsgs_->dstimg_size_ * sizeof(float), cudaMemcpyDeviceToDevice));
 
-  void** binding = reinterpret_cast<void**>(gpu_buffers_.data());
+  void** binding = reinterpret_cast<void**>(input_buffers_.data());
   bool success = execution_context_->enqueueV2(binding, stream_, nullptr);
   if (!success) {
     GLOG_ERROR(" Inference failed ");
     return false;
   }
 
-  for (int index = 0; index < parsemsgs_->branch_num_; index++) {
-    checkRuntime(cudaMemcpyAsync(cpu_buffers_[index], gpu_buffers_[engine_name_size_[binding_names_["output"][index]].first],\
-      sizeof(float) * engine_name_size_[binding_names_["output"][index]].second, cudaMemcpyDeviceToHost, stream_));
-
+  if ( parsemsgs_->postprocess_type_.find("cpu") != std::string::npos ) {
+    for (int index = 0; index < parsemsgs_->branch_num_; index++) {
+      checkRuntime(cudaMemcpyAsync(output_buffers_[index], input_buffers_[engine_name_size_[binding_names_["output"][index]].first],\
+        sizeof(float) * engine_name_size_[binding_names_["output"][index]].second, cudaMemcpyDeviceToHost, stream_));
+    }
+  } else {
+    // gpu
+    for (int index = 0; index < parsemsgs_->branch_num_; index++) {
+      checkRuntime(cudaMemcpyAsync(output_buffers_[index], input_buffers_[engine_name_size_[binding_names_["output"][index]].first],\
+        sizeof(float) * engine_name_size_[binding_names_["output"][index]].second, cudaMemcpyDeviceToDevice, stream_));
+    }
   }
 
   checkRuntime(cudaStreamSynchronize(stream_));
-
   return true;
 }
 
@@ -368,25 +374,30 @@ bool TrtInfer::ParseModel() {
 bool TrtInfer::MemAllocator() {
   GLOG_INFO("Begin allocator memory ");
 
-  gpu_buffers_.resize(in_out_size_["input"] + in_out_size_["output"]);
-  cpu_buffers_.resize(in_out_size_["output"]);
+  input_buffers_.resize(in_out_size_["input"] + in_out_size_["output"]);
+  output_buffers_.resize(in_out_size_["output"]);  //
 
   // Allocate model input memory
   for (int i = 0; i < in_out_size_["input"]; i++) {
-    checkRuntime(cudaMalloc(&gpu_buffers_[i], sizeof(float) * engine_name_size_[binding_names_["input"][i]].second));
+    checkRuntime(cudaMalloc(&input_buffers_[i], sizeof(float) * engine_name_size_[binding_names_["input"][i]].second));
   }
 
   // Allocating memory for output data.（host）
   for (int i = 0; i < in_out_size_["output"]; i++) {
+
     auto out_node_size = engine_name_size_[binding_names_["output"][i]].second;
-    checkRuntime(cudaMallocHost(&cpu_buffers_[i], sizeof(float) * out_node_size));
+    if ( parsemsgs_->postprocess_type_.find("cpu") != std::string::npos) {
+      checkRuntime(cudaMallocHost(&output_buffers_[i], sizeof(float) * out_node_size));
+    } else {
+      checkRuntime(cudaMalloc(&output_buffers_[i], sizeof(float) * out_node_size));
+    }
 
     int out_index = in_out_size_["input"] + i;
-    checkRuntime(cudaMalloc(&gpu_buffers_[out_index], sizeof(float) * out_node_size));
+    checkRuntime(cudaMalloc(&input_buffers_[out_index], sizeof(float) * out_node_size));
+
   }
 
   GLOG_INFO("Memory allocator done ");
-
   return true;
 }
 
@@ -399,13 +410,17 @@ bool TrtInfer::MemFree() {
   stream_ = nullptr;
 
   for (int out_index = 0; out_index < in_out_size_["output"]; out_index++) {
-    checkRuntime(cudaFreeHost(cpu_buffers_[out_index]));
-    cpu_buffers_[out_index] = nullptr;
+    if ( parsemsgs_->postprocess_type_.find("cpu") != std::string::npos ) {
+      checkRuntime(cudaFreeHost(output_buffers_[out_index]));
+    } else {
+      checkRuntime(cudaFree(output_buffers_[out_index]));
+    }
+    output_buffers_[out_index] = nullptr;
   }
 
   for (int index = 0; index < in_out_size_["input"] + in_out_size_["output"]; index++) {
-    checkRuntime(cudaFree(gpu_buffers_[index]));
-    gpu_buffers_[index] = nullptr;
+    checkRuntime(cudaFree(input_buffers_[index]));
+    input_buffers_[index] = nullptr;
   }
 
   return true;

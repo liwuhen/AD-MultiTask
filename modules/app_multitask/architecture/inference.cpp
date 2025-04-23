@@ -119,6 +119,7 @@ bool InferenceEngine::DataResourceRelease() {
 
   if (!preProcessor_->MemFree()) return false;
   if (!trtInfer_->MemFree()) return false;
+  if (!decodeProcessor_->MemFree()) return false;
 
   if (!checkRuntime(cudaFree(output_img_device_))) return false;
   return true;
@@ -168,7 +169,7 @@ bool InferenceEngine::Inference() {
 
     // decode bbox
     begin_timer = timestamp_now_float();
-    if (!decodeProcessor_->Inference(trtInfer_->cpu_buffers_, \
+    if (!decodeProcessor_->Inference(trtInfer_->output_buffers_, \
         input_msg_, callbackMsg, bboxQueue_)) {
       GLOG_ERROR("Decode module error. ");
       return false;

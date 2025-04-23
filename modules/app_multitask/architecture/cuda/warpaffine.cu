@@ -85,7 +85,7 @@ static __global__ void warp_affine_bilinear_kernel(uint8_t* src, int batch, int 
 
   int area = dst_width * dst_height;
 
-  if (app_mode == AppTask::YOLOP_MODE) {
+  if (app_mode == AppTask::A_YOLOM_MODE) {
     // normalisation
     c0 = (c0 / 255.0f);
     c1 = (c1 / 255.0f);
@@ -98,7 +98,7 @@ static __global__ void warp_affine_bilinear_kernel(uint8_t* src, int batch, int 
     *pdst_r = c0;
     *pdst_g = c1;
     *pdst_b = c2;
-  } else if (app_mode == AppTask::A_YOLOM_MODE) {
+  } else if (app_mode == AppTask::YOLOP_MODE) {
     // bgr to rgb && HWC to CHW
     float* pdst_b = dsts + area * 0 + dy * dst_width + dx;
     float* pdst_g = dsts + area * 1 + dy * dst_width + dx;
