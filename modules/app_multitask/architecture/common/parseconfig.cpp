@@ -40,7 +40,6 @@ void ParseMsgs::ReadYamlParam() {
   model_acc_ = app_config->get_model_acc_();
   nms_type_  = app_config->get_nms_type_();
   model_name_     = app_config->get_model_name_();
-  infer_mode_     = app_config->get_infer_mode_();
   batch_mode_     = app_config->get_batch_mode_();
   branch_num_     = app_config->get_branch_num_();
   batchsizes_     = app_config->get_batchsizes_();
@@ -67,6 +66,12 @@ void ParseMsgs::ReadYamlParam() {
   segda_predict_dim_ = app_config->get_segda_predict_dim_();
   segll_predict_dim_ = app_config->get_segll_predict_dim_();
 
+  visual_mode_           = app_config->get_visual_mode_();
+  detect_mode_           = app_config->get_detect_mode_();
+  seg_lane_mode_         = app_config->get_seg_lane_mode_();
+  seg_drivable_mode_     = app_config->get_seg_drivable_mode_();
+  preprocess_mode_       = app_config->get_preprocess_mode_();
+  postprocess_mode_      = app_config->get_postprocess_mode_();
   postprocess_type_      = app_config->get_postprocess_type_();
   calib_table_path_      = app_config->get_calib_table_path_();
   calib_preprocess_type_ = app_config->get_calib_preprocess_type_();

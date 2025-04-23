@@ -101,12 +101,6 @@ bool DecodeProcessor::Inference(std::vector<float*>& predict,
 
   Decode(predict, infer_msg, multitask_result);
 
-  // Copy results back to host
-  checkRuntime(cudaMemcpy(multitask_result.seg_lane.data(), seg_data_device_[0], \
-               multitask_result.seg_lane.size() * sizeof(uint8_t), cudaMemcpyDeviceToHost));
-  checkRuntime(cudaMemcpy(multitask_result.seg_drivable.data(), seg_data_device_[1],\
-               multitask_result.seg_drivable.size() * sizeof(uint8_t), cudaMemcpyDeviceToHost));
-
   InfertMsg msg;
   msg = infer_msg;
   for (auto& box : multitask_result.box_result) {
@@ -115,7 +109,9 @@ bool DecodeProcessor::Inference(std::vector<float*>& predict,
   bboxQueue->Push(msg);
   callbackMsg.emplace_back(msg);
 
-  VisualizationMultiTask(false, infer_msg.image, infer_msg.index, multitask_result);
+  if ( parsemsgs_->visual_mode_ ) {
+    VisualizationMultiTask(false, infer_msg.image, infer_msg.index, multitask_result);
+  }
 
   return true;
 }
@@ -174,11 +170,17 @@ void DecodeProcessor::VisualizationMultiTask(bool real_time,
     cv::Mat& img, int64_t timestamp, MultiTaskMsg& multitask_result) {
   
   // od vis
-  VisualizationDet(img, multitask_result.box_result);
+  if ( parsemsgs_->detect_mode_ ) {
+    VisualizationDet(img, multitask_result.box_result);
+  }
   // seg drivable vis
-  VisualizationSeg(img, SegTask::SEG_DRIVABLE, multitask_result.seg_drivable);
+  if ( parsemsgs_->detect_mode_ ) {
+    VisualizationSeg(img, SegTask::SEG_DRIVABLE, multitask_result.seg_drivable);
+  }
   // seg lane vis
-  VisualizationSeg(img, SegTask::SEG_LANE, multitask_result.seg_lane);
+  if ( parsemsgs_->detect_mode_ ) {
+    VisualizationSeg(img, SegTask::SEG_LANE, multitask_result.seg_lane);
+  }
 
   if (real_time) {
     cv::imshow("Live Video", img);
@@ -220,7 +222,23 @@ void DecodeProcessor::Decode(std::vector<float*>& predict,
 
   auto postprocess = Registry::getInstance()->getRegisterFunc<InfertMsg&, std::vector<float*>&,
                      std::vector<uint8_t*>&, std::shared_ptr<ParseMsgs>&>(parsemsgs_->postprocess_type_);
-  postprocess(infer_msg, predict, seg_data_device_, parsemsgs_);
+
+  // Copy results back to host
+  if ( static_cast<DeviceMode>(parsemsgs_->postprocess_mode_) == DeviceMode::CPU_MODE ) {
+    auto postprocess = Registry::getInstance()->getRegisterFunc<InfertMsg&, MultiTaskMsg&,
+                     std::vector<float*>&, std::shared_ptr<ParseMsgs>&>(parsemsgs_->postprocess_type_);
+    postprocess(infer_msg, multitask_result, predict, parsemsgs_);
+
+  } else if ( static_cast<DeviceMode>(parsemsgs_->postprocess_mode_) == DeviceMode::GPU_MODE ) {
+    auto postprocess = Registry::getInstance()->getRegisterFunc<InfertMsg&, std::vector<float*>&,
+                     std::vector<uint8_t*>&, std::shared_ptr<ParseMsgs>&>(parsemsgs_->postprocess_type_);
+    postprocess(infer_msg, predict, seg_data_device_, parsemsgs_);
+
+    checkRuntime(cudaMemcpy(multitask_result.seg_lane.data(), seg_data_device_[0], \
+                multitask_result.seg_lane.size() * sizeof(uint8_t), cudaMemcpyDeviceToHost));
+    checkRuntime(cudaMemcpy(multitask_result.seg_drivable.data(), seg_data_device_[1],\
+                multitask_result.seg_drivable.size() * sizeof(uint8_t), cudaMemcpyDeviceToHost));
+  }
 }
 
 /**

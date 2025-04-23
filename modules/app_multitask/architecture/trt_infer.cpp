@@ -114,17 +114,18 @@ bool TrtInfer::Inference(float* output_img_device) {
     return false;
   }
 
-  if ( parsemsgs_->postprocess_type_.find("cpu") != std::string::npos ) {
+  if ( static_cast<DeviceMode>(parsemsgs_->postprocess_mode_) == DeviceMode::CPU_MODE ) {
     for (int index = 0; index < parsemsgs_->branch_num_; index++) {
       checkRuntime(cudaMemcpyAsync(output_buffers_[index], input_buffers_[engine_name_size_[binding_names_["output"][index]].first],\
         sizeof(float) * engine_name_size_[binding_names_["output"][index]].second, cudaMemcpyDeviceToHost, stream_));
     }
-  } else {
-    // gpu
+  } else if ( static_cast<DeviceMode>(parsemsgs_->postprocess_mode_) == DeviceMode::GPU_MODE ) {
     for (int index = 0; index < parsemsgs_->branch_num_; index++) {
       checkRuntime(cudaMemcpyAsync(output_buffers_[index], input_buffers_[engine_name_size_[binding_names_["output"][index]].first],\
         sizeof(float) * engine_name_size_[binding_names_["output"][index]].second, cudaMemcpyDeviceToDevice, stream_));
     }
+  } else {
+    GLOG_INFO("[Inference]: NPU mode.");
   }
 
   checkRuntime(cudaStreamSynchronize(stream_));
@@ -386,10 +387,12 @@ bool TrtInfer::MemAllocator() {
   for (int i = 0; i < in_out_size_["output"]; i++) {
 
     auto out_node_size = engine_name_size_[binding_names_["output"][i]].second;
-    if ( parsemsgs_->postprocess_type_.find("cpu") != std::string::npos) {
+    if ( static_cast<DeviceMode>(parsemsgs_->postprocess_mode_) == DeviceMode::CPU_MODE ) {
       checkRuntime(cudaMallocHost(&output_buffers_[i], sizeof(float) * out_node_size));
-    } else {
+    } else if ( static_cast<DeviceMode>(parsemsgs_->postprocess_mode_) == DeviceMode::GPU_MODE ) {
       checkRuntime(cudaMalloc(&output_buffers_[i], sizeof(float) * out_node_size));
+    } else {
+      GLOG_INFO("[MemAllocator]: NPU mode.");
     }
 
     int out_index = in_out_size_["input"] + i;
@@ -410,10 +413,12 @@ bool TrtInfer::MemFree() {
   stream_ = nullptr;
 
   for (int out_index = 0; out_index < in_out_size_["output"]; out_index++) {
-    if ( parsemsgs_->postprocess_type_.find("cpu") != std::string::npos ) {
+    if ( static_cast<DeviceMode>(parsemsgs_->postprocess_mode_) == DeviceMode::CPU_MODE ) {
       checkRuntime(cudaFreeHost(output_buffers_[out_index]));
-    } else {
+    } else if ( static_cast<DeviceMode>(parsemsgs_->postprocess_mode_) == DeviceMode::GPU_MODE ) {
       checkRuntime(cudaFree(output_buffers_[out_index]));
+    } else {
+      GLOG_INFO("[MemFree]: NPU mode.");
     }
     output_buffers_[out_index] = nullptr;
   }

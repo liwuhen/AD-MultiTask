@@ -62,6 +62,10 @@ class AppConfig {
 
   REG_CUS_VAR(home_path_);
   REG_YAML_VAR(bool, is_init_);
+  REG_YAML_VAR(bool, visual_mode_);
+  REG_YAML_VAR(bool, detect_mode_);
+  REG_YAML_VAR(bool, seg_lane_mode_);
+  REG_YAML_VAR(bool, seg_drivable_mode_);
   REG_YAML_VAR(bool, quantize_flag_);
   REG_YAML_VAR(int, src_img_w_);
   REG_YAML_VAR(int, src_img_h_);
@@ -74,12 +78,13 @@ class AppConfig {
   REG_YAML_VAR(int, decode_type_);
   REG_YAML_VAR(int, max_objects_);
   REG_YAML_VAR(int, model_acc_);
-  REG_YAML_VAR(int, infer_mode_);
   REG_YAML_VAR(int, batch_mode_);
   REG_YAML_VAR(int, max_batchsize_);
   REG_YAML_VAR(int, calib_batchsize_);
   REG_YAML_VAR(int, input_msgdepth_);
   REG_YAML_VAR(int, decode_msgdepth_);
+  REG_YAML_VAR(int, preprocess_mode_);
+  REG_YAML_VAR(int, postprocess_mode_);
   REG_YAML_VAR(float, obj_threshold_);
   REG_YAML_VAR(float, nms_threshold_);
   REG_YAML_VAR(std::string, nms_type_);

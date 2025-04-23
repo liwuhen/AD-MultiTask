@@ -1,0 +1,4 @@
+# Hashes of file build rules.
+a47873e6d03f46838d6f58906341901f modules/app_multitask/CMakeFiles/a_yolom_gpu_decode.dir/architecture/cuda/a_yolom_gpu_decode_generated_gpu_decode.cu.o
+2edf89461bcf9228ace10bfbe460a81e modules/app_multitask/CMakeFiles/a_yolom_gpu_decode_seg.dir/architecture/cuda/a_yolom_gpu_decode_seg_generated_gpu_seg.cu.o
+fb1a5fd651b267ff8057f9e02a29b9ce modules/app_multitask/CMakeFiles/a_yolom_gpu_proprecessor.dir/architecture/cuda/a_yolom_gpu_proprecessor_generated_warpaffine.cu.o

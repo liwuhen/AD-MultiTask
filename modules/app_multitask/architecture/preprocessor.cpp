@@ -85,23 +85,20 @@ bool PreProcessor::DataResourceRelease() {}
  * @description: Inference.
  */
 bool PreProcessor::Inference(InfertMsg& input_msg,
-    float* dstimg, DeviceMode inferMode, cudaStream_t stream) {
+    float* dstimg, cudaStream_t stream) {
 
   CalAffineMatrix(input_msg);
 
-  switch (inferMode) {
-    case DeviceMode::GPU_MODE:
-      if (!GpuPreprocessor(input_msg, dstimg, stream)) {
-        return false;
-      }
-      break;
-    case DeviceMode::CPU_MODE:
-      if (!CpuPreprocessor(input_msg, dstimg, stream)) {
-        return false;
-      }
-      break;
-    default:
-      break;
+  if ( static_cast<DeviceMode>(parsemsgs_->preprocess_mode_) == DeviceMode::CPU_MODE ) {
+    if (!CpuPreprocessor(input_msg, dstimg, stream)) {
+      return false;
+    }
+  } else if ( static_cast<DeviceMode>(parsemsgs_->preprocess_mode_)== DeviceMode::GPU_MODE ) {
+    if (!GpuPreprocessor(input_msg, dstimg, stream)) {
+      return false;
+    }
+  } else {
+    GLOG_INFO("[Inference]: NPU mode.");
   }
 
   return true;

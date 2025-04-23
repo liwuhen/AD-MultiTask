@@ -112,7 +112,7 @@ class PreProcessor : public InferModuleBase {
    * @param[in] float*.
    * @return    bool.
    */
-  bool Inference(InfertMsg& input_msg, float* dstimg, DeviceMode inferMode, cudaStream_t stream);
+  bool Inference(InfertMsg& input_msg, float* dstimg, cudaStream_t stream);
 
  private:
   /**

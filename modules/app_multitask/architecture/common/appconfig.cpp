@@ -22,6 +22,10 @@ AppConfig* AppConfig::pinstance_(nullptr);
 std::mutex AppConfig::mutex_;
 YAML::Node AppConfig::yaml_node_;
 bool AppConfig::is_init_;
+bool AppConfig::visual_mode_;
+bool AppConfig::detect_mode_;
+bool AppConfig::seg_lane_mode_;
+bool AppConfig::seg_drivable_mode_;
 bool AppConfig::quantize_flag_;
 int AppConfig::src_img_w_;
 int AppConfig::src_img_h_;
@@ -32,12 +36,13 @@ int AppConfig::dst_img_c_;
 int AppConfig::model_acc_;
 int AppConfig::branch_num_;
 int AppConfig::batchsizes_;
-int AppConfig::infer_mode_;
 int AppConfig::batch_mode_;
 int AppConfig::decode_type_;
 int AppConfig::max_objects_;
 int AppConfig::max_batchsize_;
 int AppConfig::input_msgdepth_;
+int AppConfig::preprocess_mode_;
+int AppConfig::postprocess_mode_;
 int AppConfig::decode_msgdepth_;
 int AppConfig::calib_batchsize_;
 float AppConfig::obj_threshold_;
@@ -116,7 +121,6 @@ AppConfig::AppConfig(const std::string& config_filename) : config_filename_(conf
   trt_path_       = yaml_node_["inference_config"]["engine_path"].as<std::string>();
   onnx_path_      = yaml_node_["inference_config"]["onnx_path"].as<std::string>();
   model_acc_      = yaml_node_["inference_config"]["model_acc"].as<int>();
-  infer_mode_     = yaml_node_["inference_config"]["infer_mode"].as<int>();
   batch_mode_     = yaml_node_["inference_config"]["batch_mode"].as<int>();
   input_msgdepth_ = yaml_node_["inference_config"]["input_msgdepth"].as<int>();
   decode_msgdepth_= yaml_node_["inference_config"]["decode_msgdepth"].as<int>();
@@ -130,8 +134,15 @@ AppConfig::AppConfig(const std::string& config_filename) : config_filename_(conf
   calib_table_path_      = yaml_node_["common_config"]["calib_table_path"].as<std::string>();
   calib_preprocess_type_ = yaml_node_["common_config"]["calib_preprocess_type"].as<std::string>();
   nms_type_         = yaml_node_["model_config"]["nms_type"].as<std::string>();
-  preprocess_type_  = yaml_node_["model_config"]["preprocess_type"].as<std::string>();
-  postprocess_type_ = yaml_node_["model_config"]["postprocess_type"].as<std::string>();
+  preprocess_mode_  = yaml_node_["model_config"]["preprocess_module"]["mode"].as<int>();
+  postprocess_mode_ = yaml_node_["model_config"]["postprocess_module"]["mode"].as<int>();
+  preprocess_type_  = yaml_node_["model_config"]["preprocess_module"]["components"].as<std::string>();
+  postprocess_type_ = yaml_node_["model_config"]["postprocess_module"]["components"].as<std::string>();
+
+  visual_mode_      = yaml_node_["visual_config"]["visual_mode"].as<bool>();
+  detect_mode_      = yaml_node_["visual_config"]["detect_mode"].as<bool>();
+  seg_lane_mode_    = yaml_node_["visual_config"]["seg_lane_mode"].as<bool>();
+  seg_drivable_mode_= yaml_node_["visual_config"]["seg_drivable_mode"].as<bool>();
 
   for (int index = 0; index < yaml_node_["predict_config"]["det_predict_dim"].size(); index++) {
     det_predict_dim_.push_back(yaml_node_["predict_config"]["det_predict_dim"][index].as<std::vector<int>>());

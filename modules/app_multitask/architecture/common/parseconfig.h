@@ -60,6 +60,10 @@ class ParseMsgs {
 
  public:
   bool is_init_;
+  bool visual_mode_;      // Visual mode true || false
+  bool detect_mode_;      // Detect mode true || false
+  bool seg_lane_mode_;    // SEG lane  true || false
+  bool seg_drivable_mode_;// SEG drivable  true || false
   bool quantize_flag_;   // Quantize flag
   int src_img_w_;        // Raw image width
   int src_img_h_;        // Raw image height
@@ -72,7 +76,6 @@ class ParseMsgs {
   int model_acc_;        // Model quantisation accuracy
   int branch_num_;       // Model branch number
   int batchsizes_;       // Batch size
-  int infer_mode_;       // Infer mode, 0-gpu, 1-cpu, 2-npu
   int batch_mode_;       // Batch mode, 0-static batch, 1-dynamic batch
   int decode_type_;      // Decode type
   int max_objects_;      // Maximum number of targets
@@ -80,6 +83,8 @@ class ParseMsgs {
   int calib_batchsize_;  // Calibrator batch size;
   int input_msgdepth_;   // Input msg queue length
   int decode_msgdepth_;  // Decode msg queue length
+  int preprocess_mode_;  // Preprocess mode  0-gpu, 1-cpu, 2-npu
+  int postprocess_mode_; // Postprocess mode 0-gpu, 1-cpu, 2-npu
   float obj_threshold_;  // Target Thresholds
   float nms_threshold_;  // Nms Target Thresholds
 

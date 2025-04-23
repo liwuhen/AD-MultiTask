@@ -152,8 +152,7 @@ bool InferenceEngine::Inference() {
     // preprocessor
     auto start_timer = timestamp_now_float();
     auto begin_timer = timestamp_now_float();
-    if (!preProcessor_->Inference(input_msg_, output_img_device_, \
-        (DeviceMode)parsemsgs_->infer_mode_, nullptr)) {
+    if (!preProcessor_->Inference(input_msg_, output_img_device_, nullptr)) {
       GLOG_ERROR("PreProcessor module error. ");
       return false;
     }
