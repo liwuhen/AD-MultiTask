@@ -180,11 +180,11 @@ void DecodeProcessor::VisualizationMultiTask(bool real_time,
     VisualizationDet(img, multitask_result.box_result);
   }
   // seg drivable vis
-  if ( parsemsgs_->detect_mode_ ) {
+  if ( parsemsgs_->seg_drivable_mode_ ) {
     VisualizationSeg(img, SegTask::SEG_DRIVABLE, multitask_result.seg_drivable);
   }
   // seg lane vis
-  if ( parsemsgs_->detect_mode_ ) {
+  if ( parsemsgs_->seg_lane_mode_ ) {
     VisualizationSeg(img, SegTask::SEG_LANE, multitask_result.seg_lane);
   }
 

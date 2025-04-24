@@ -55,7 +55,7 @@ predict_config:
   nms_threshold: 0.45
 
 visual_config:
-  visual_mode: false
+  visual_mode: true
   detect_mode: true
   seg_lane_mode: true
   seg_drivable_mode: true
