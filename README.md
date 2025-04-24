@@ -41,6 +41,9 @@ Visit our documentation to learn more.
 - [Supported Object Tracking](./docs/hpcdoc/source/algorithm/Supported_Object_Tracking.md)
 
 # Performances
+| ![Image 1](./docs/images/img_1.jpg) | ![Image 2](./docs/images/img_2.jpg) |
+|--------------------------------|--------------------------------|
+| ![Image 3](./docs/images/img_3.jpg) | ![Image 4](./docs/images/img_4.jpg) |
 - Dataset: 
     - BDD100K
         > The validation dataset is BDD100K, which contains 70000 training samples and 10000 val samples. All models in the table were trained on the full BDD100K dataset.
