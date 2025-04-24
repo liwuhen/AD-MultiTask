@@ -73,13 +73,17 @@ class ParseMsgs {
   int dst_img_h_;        // Target image height
   int dst_img_c_;        // Target image channel
   int dstimg_size_;      // Target image size
+  int class_num_;        // Dataset calss num
   int model_acc_;        // Model quantisation accuracy
   int branch_num_;       // Model branch number
   int batchsizes_;       // Batch size
   int batch_mode_;       // Batch mode, 0-static batch, 1-dynamic batch
   int decode_type_;      // Decode type
   int max_objects_;      // Maximum number of targets
+  int det_head_num_;     // Detect head num
+  int seg_head_num_;     // Seg head num
   int max_batchsize_;    // Max batch size
+  int decode_bbox_dim_;  // Decode bbox dim
   int calib_batchsize_;  // Calibrator batch size;
   int input_msgdepth_;   // Input msg queue length
   int decode_msgdepth_;  // Decode msg queue length

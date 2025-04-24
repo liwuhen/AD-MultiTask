@@ -189,10 +189,13 @@ class DecodeProcessor : public InferModuleBase {
 
  private:
   size_t input_size_;
+  size_t output_size_;
   std::atomic<bool> running_;
 
   InfertMsg output_msg_;
 
+  std::vector<float *> det_data_host_;
+  std::vector<float*> det_data_device_;
   std::vector<uint8_t *> seg_data_device_;
 
   shared_ptr<ParseMsgs> parsemsgs_;

@@ -94,7 +94,7 @@ static std::vector<double> GetAverageTime(std::vector<double>& preproccess_time,
     double endtoend_times   = 0.0;
     std::vector<double> time;
     int nums = preproccess_time.size();
-    for ( int ind = 0; ind < nums; ind++ ) {
+    for ( int ind = 2; ind < nums; ind++ ) {
       preprocess_times += preproccess_time[ind];
       infer_times      += infer_time[ind];
       decode_times     += decode_time[ind];
@@ -102,10 +102,10 @@ static std::vector<double> GetAverageTime(std::vector<double>& preproccess_time,
 
     }
 
-    auto average_pretime = preprocess_times / nums;
-    auto average_inftime = infer_times / nums;
-    auto average_dectime = decode_times / nums;
-    auto average_endtoendtime = endtoend_times / nums;
+    auto average_pretime = preprocess_times / (nums -2);
+    auto average_inftime = infer_times / (nums -2);
+    auto average_dectime = decode_times / (nums -2);
+    auto average_endtoendtime = endtoend_times / (nums -2);
     time.push_back(average_pretime);
     time.push_back(average_inftime);
     time.push_back(average_dectime);

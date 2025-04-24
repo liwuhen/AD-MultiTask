@@ -33,15 +33,19 @@ int AppConfig::src_img_c_;
 int AppConfig::dst_img_w_;
 int AppConfig::dst_img_h_;
 int AppConfig::dst_img_c_;
+int AppConfig::class_num_;
 int AppConfig::model_acc_;
 int AppConfig::branch_num_;
 int AppConfig::batchsizes_;
 int AppConfig::batch_mode_;
+int AppConfig::det_head_num_;
+int AppConfig::seg_head_num_;
 int AppConfig::decode_type_;
 int AppConfig::max_objects_;
 int AppConfig::max_batchsize_;
 int AppConfig::input_msgdepth_;
 int AppConfig::preprocess_mode_;
+int AppConfig::decode_bbox_dim_;
 int AppConfig::postprocess_mode_;
 int AppConfig::decode_msgdepth_;
 int AppConfig::calib_batchsize_;
@@ -114,6 +118,8 @@ AppConfig::AppConfig(const std::string& config_filename) : config_filename_(conf
   branch_num_  = yaml_node_["predict_config"]["branch_num"].as<int>();
   decode_type_ = yaml_node_["predict_config"]["decode_type"].as<int>();
   max_objects_ = yaml_node_["predict_config"]["max_objects"].as<int>();
+  class_num_   = yaml_node_["predict_config"]["class_num"].as<int>();
+  decode_bbox_dim_= yaml_node_["predict_config"]["decode_bbox_dim"].as<int>();
   obj_threshold_  = yaml_node_["predict_config"]["obj_threshold"].as<float>();
   nms_threshold_  = yaml_node_["predict_config"]["nms_threshold"].as<float>();
   img_path_       = yaml_node_["inference_config"]["offline_test"]["img_path"].as<std::string>();
@@ -139,6 +145,8 @@ AppConfig::AppConfig(const std::string& config_filename) : config_filename_(conf
   preprocess_type_  = yaml_node_["model_config"]["preprocess_module"]["components"].as<std::string>();
   postprocess_type_ = yaml_node_["model_config"]["postprocess_module"]["components"].as<std::string>();
 
+  det_head_num_     = yaml_node_["predict_config"]["det_head_num"].as<int>();
+  seg_head_num_     = yaml_node_["predict_config"]["seg_head_num"].as<int>();
   visual_mode_      = yaml_node_["visual_config"]["visual_mode"].as<bool>();
   detect_mode_      = yaml_node_["visual_config"]["detect_mode"].as<bool>();
   seg_lane_mode_    = yaml_node_["visual_config"]["seg_lane_mode"].as<bool>();

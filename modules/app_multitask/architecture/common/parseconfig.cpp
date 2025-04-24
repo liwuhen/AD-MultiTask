@@ -39,6 +39,7 @@ void ParseMsgs::ReadYamlParam() {
   dst_img_c_ = app_config->get_dst_img_c_();
   model_acc_ = app_config->get_model_acc_();
   nms_type_  = app_config->get_nms_type_();
+  class_num_      = app_config->get_class_num_();
   model_name_     = app_config->get_model_name_();
   batch_mode_     = app_config->get_batch_mode_();
   branch_num_     = app_config->get_branch_num_();
@@ -56,6 +57,7 @@ void ParseMsgs::ReadYamlParam() {
   calib_batchsize_= app_config->get_calib_batchsize_();
   decode_msgdepth_= app_config->get_decode_msgdepth_();
   preprocess_type_= app_config->get_preprocess_type_();
+  decode_bbox_dim_= app_config->get_decode_bbox_dim_();
   img_path_       = app_config->get_home_path_() + app_config->get_img_path_();
   save_img_       = app_config->get_home_path_() + app_config->get_save_img_();
   trt_path_       = app_config->get_home_path_() + app_config->get_trt_path_();
@@ -66,6 +68,8 @@ void ParseMsgs::ReadYamlParam() {
   segda_predict_dim_ = app_config->get_segda_predict_dim_();
   segll_predict_dim_ = app_config->get_segll_predict_dim_();
 
+  det_head_num_          = app_config->get_det_head_num_();
+  seg_head_num_          = app_config->get_seg_head_num_();
   visual_mode_           = app_config->get_visual_mode_();
   detect_mode_           = app_config->get_detect_mode_();
   seg_lane_mode_         = app_config->get_seg_lane_mode_();

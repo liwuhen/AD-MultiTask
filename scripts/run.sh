@@ -37,6 +37,6 @@ if [ "${INSTALL_PATH}" != "" ] ; then
 fi
 TENSORRT=/home/IM/x86_toolchain/tensorrt
 THIRD_PARTY="${INSTALL_PATH}"/third_party
-export LD_LIBRARY_PATH=$INSTALL_PATH/proprecessor:$INSTALL_PATH/libs:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$INSTALL_PATH/proprecessor:$INSTALL_PATH/postprecessor:$INSTALL_PATH/libs:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH=$THIRD_PARTY/opencv:$TENSORRT/lib:$LD_LIBRARY_PATH
 cd "${INSTALL_PATH}" && ./"${MODEL_FLAG,,}"_project_exe

@@ -31,8 +31,13 @@ DecodeProcessor::~DecodeProcessor() {}
  */
 bool DecodeProcessor::Init() {
 
-  input_size_ = parsemsgs_->src_img_w_ * parsemsgs_->src_img_h_;
+  input_size_  = parsemsgs_->src_img_w_ * parsemsgs_->src_img_h_;
+  output_size_ = 1 + parsemsgs_->max_objects_ * parsemsgs_->decode_bbox_dim_;
+  seg_data_device_.resize(parsemsgs_->seg_head_num_);
+  det_data_device_.resize(parsemsgs_->det_head_num_);
+  det_data_host_.resize(parsemsgs_->det_head_num_);
   MemAllocator();
+  
   GLOG_INFO("[Init]: DecodeProcessor module init ");
   return true;
 }
@@ -94,6 +99,7 @@ bool DecodeProcessor::Inference(std::vector<float*>& predict,
 
   MultiTaskMsg multitask_result;
   size_t img_size = infer_msg.height * infer_msg.width;
+  multitask_result.box_result.resize(output_size_);
   multitask_result.seg_lane.resize(img_size, 0);
   multitask_result.seg_drivable.resize(img_size, 0);
 
@@ -230,14 +236,28 @@ void DecodeProcessor::Decode(std::vector<float*>& predict,
     postprocess(infer_msg, multitask_result, predict, parsemsgs_);
 
   } else if ( static_cast<DeviceMode>(parsemsgs_->postprocess_mode_) == DeviceMode::GPU_MODE ) {
-    auto postprocess = Registry::getInstance()->getRegisterFunc<InfertMsg&, std::vector<float*>&,
-                     std::vector<uint8_t*>&, std::shared_ptr<ParseMsgs>&>(parsemsgs_->postprocess_type_);
-    postprocess(infer_msg, predict, seg_data_device_, parsemsgs_);
+    auto postprocess = Registry::getInstance()->getRegisterFunc<InfertMsg&, std::vector<float*>&,\
+          std::vector<float*>&, std::vector<uint8_t*>&, std::shared_ptr<ParseMsgs>&>(parsemsgs_->postprocess_type_);
+    postprocess(infer_msg, predict, det_data_device_, seg_data_device_, parsemsgs_);
 
+    // seg module
     checkRuntime(cudaMemcpy(multitask_result.seg_lane.data(), seg_data_device_[0], \
                 multitask_result.seg_lane.size() * sizeof(uint8_t), cudaMemcpyDeviceToHost));
     checkRuntime(cudaMemcpy(multitask_result.seg_drivable.data(), seg_data_device_[1],\
                 multitask_result.seg_drivable.size() * sizeof(uint8_t), cudaMemcpyDeviceToHost));
+
+    // detect module
+    checkRuntime(cudaMemcpy(det_data_host_[0], det_data_device_[0], \
+                output_size_ * sizeof(float), cudaMemcpyDeviceToHost));
+    int num_boxes = min((int)det_data_host_[0][0], parsemsgs_->max_objects_);
+    for ( int ind = 0; ind < num_boxes; ind++ ) {
+      float* ptr = det_data_host_[0] + 1 + parsemsgs_->decode_bbox_dim_ * ind;
+      int keep_flag = ptr[6];
+      if( keep_flag ){
+          multitask_result.box_result.emplace_back(
+            ptr[0], ptr[1], ptr[2], ptr[3], ptr[4], (int)ptr[5]);
+      }
+    }
   }
 }
 
@@ -245,11 +265,14 @@ void DecodeProcessor::Decode(std::vector<float*>& predict,
  * @description: Memory allocator.
  */
 bool DecodeProcessor::MemAllocator() {
-  seg_data_device_.resize(2);
-  
-  for ( int ind = 0; ind < 2; ind++ ) {
+  for ( int ind = 0; ind < parsemsgs_->seg_head_num_; ind++ ) {
     checkRuntime(cudaMalloc(&seg_data_device_[ind], sizeof(uint8_t) * input_size_));
     checkRuntime(cudaMemset(seg_data_device_[ind], 0, input_size_ * sizeof(uint8_t))); // 初始化设备内存为0
+  }
+  for ( int ind = 0; ind < parsemsgs_->det_head_num_; ind++ ) {
+    checkRuntime(cudaMalloc(&det_data_device_[ind], sizeof(float) * output_size_));
+    checkRuntime(cudaMallocHost(&det_data_host_[ind], sizeof(float) * output_size_));
+    checkRuntime(cudaMemset(det_data_device_[ind], 0, output_size_ * sizeof(float))); // 初始化设备内存为0
   }
 
   return true;
@@ -259,8 +282,11 @@ bool DecodeProcessor::MemAllocator() {
  * @description: Reset memory.
  */
 bool DecodeProcessor::ResetMemory() {
-  for ( int ind = 0; ind < 2; ind++ ) {
+  for ( int ind = 0; ind < parsemsgs_->seg_head_num_; ind++ ) {
     checkRuntime(cudaMemset(seg_data_device_[ind], 0, input_size_ * sizeof(uint8_t))); // 初始化设备内存为0
+  }
+  for ( int ind = 0; ind < parsemsgs_->det_head_num_; ind++ ) {
+    checkRuntime(cudaMemset(det_data_device_[ind], 0, output_size_ * sizeof(float))); // 初始化设备内存为0
   }
 }
 
@@ -268,9 +294,14 @@ bool DecodeProcessor::ResetMemory() {
  * @description: Cpu and gpu memory free.
  */
 bool DecodeProcessor::MemFree() {
-  for ( int ind = 0; ind < 2; ind++ ) {
+  for ( int ind = 0; ind < parsemsgs_->seg_head_num_; ind++ ) {
     checkRuntime(cudaFree(seg_data_device_[ind]));
     seg_data_device_[ind] = nullptr;
+  }
+  for ( int ind = 0; ind < parsemsgs_->det_head_num_; ind++ ) {
+    checkRuntime(cudaFreeHost(det_data_host_[ind]));
+    checkRuntime(cudaFree(det_data_device_[ind]));
+    det_data_device_[ind] = nullptr;
   }
   return true;
 }

@@ -20,6 +20,7 @@
 
 #include <opencv2/opencv.hpp>
 #include "logger.h"
+#include "gpu_nms.hpp"
 #include "parseconfig.h"
 #include "task_struct.hpp"
 #include "function_registry.hpp"
@@ -50,8 +51,7 @@ inline float calIou(Box& box_a, Box& box_b) {
 /**
  * @description: Nms.
  */
-inline void CalNms(
-    float nms_threshold,
+inline void CalNmsCpu(float nms_threshold,
     vector<Box>& boxes,
     vector<Box>& box_result) {
 
@@ -81,8 +81,20 @@ inline void CalNms(
 
 }
 
+inline void CalNmsGpu(float* bboxes,
+    float nms_threshold, int max_objects,
+    int decode_bbox_dim, cudaStream_t stream) {
+
+    // nms 过程：
+    // 1、按照类别概率排序，2、从最大概率矩形框开始，与其他框判断 iou
+    // 是否超过阈值，3、标记重叠度超过阈值的框，丢掉，4、从剩余框中选择概率最大框并于剩余框判断重叠度是否超过阈值，重复步骤
+    // 3 过程
+    fast_nms_kernel_invoker(bboxes, nms_threshold, max_objects, decode_bbox_dim, stream);
+}
+
 // 全局自动注册
-REGISTER_CALIBRATOR_FUNC("nms", CalNms);
+REGISTER_CALIBRATOR_FUNC("nms_cpu", CalNmsCpu);
+REGISTER_CALIBRATOR_FUNC("nms_gpu", CalNmsGpu);
 
 }  // namespace appinfer
 }  // namespace hpc

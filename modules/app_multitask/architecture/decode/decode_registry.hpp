@@ -23,6 +23,7 @@
 #include "parseconfig.h"
 #include "nms_registry.hpp"
 #include "gpu_seg.hpp"
+#include "gpu_decode.hpp"
 
 namespace hpc {
 
@@ -120,52 +121,26 @@ inline void AYoloMSegCpuAchorFree(
  */
 inline void AYoloMDetectGpuAchorFree(
     InfertMsg& infer_msg,
-    std::vector<Box>& box_result,
     std::vector<float*>& predict,
+    std::vector<float*>& det_data_device,
     std::shared_ptr<ParseMsgs>& parsemsgs) {
     
-    vector<Box> boxes;
-    int num_classes = parsemsgs->det_predict_dim_[0][2] - 4;
-    for (int i = 0; i < parsemsgs->det_predict_dim_[0][1]; ++i)
-    {
-        float* pitem  = predict[2] + i * parsemsgs->det_predict_dim_[0][2];
-        float* pclass = pitem + 4;
+    int num_bboxes = parsemsgs->det_predict_dim_[0][1];
+    int bbox_dim   = parsemsgs->det_predict_dim_[0][2];
+    int num_classes= parsemsgs->class_num_;
+    int max_objects= parsemsgs->max_objects_;
+    int decode_bbox_dim = parsemsgs->decode_bbox_dim_;
 
-        int label  = std::max_element(pclass, pclass + num_classes) - pclass;
-        float prob = pclass[label];
-        float confidence = prob;    // anchor free
-        if (confidence < parsemsgs->obj_threshold_) continue;
+    decode_kernel_invoker(predict[2], num_bboxes, num_classes, bbox_dim, parsemsgs->obj_threshold_,\
+        max_objects, infer_msg.affineMatrix_inv, det_data_device[0], decode_bbox_dim, nullptr);
 
-        float cx     = pitem[0];
-        float cy     = pitem[1];
-        float width  = pitem[2];
-        float height = pitem[3];
-        float left   = cx - width  * 0.5;
-        float top    = cy - height * 0.5;
-        float right  = cx + width  * 0.5;
-        float bottom = cy + height * 0.5;
-
-        // 输入图像层级模型预测框 ==> 映射回原图上尺寸
-        float image_left   = infer_msg.affineMatrix_inv(0, 0) * (left   - infer_msg.affineVec(0)) \
-                            + infer_msg.affineMatrix_inv(0, 2);
-        float image_top    = infer_msg.affineMatrix_inv(1, 1) * (top    - infer_msg.affineVec(1)) \
-                            + infer_msg.affineMatrix_inv(1, 2);
-        float image_right  = infer_msg.affineMatrix_inv(0, 0) * (right  - infer_msg.affineVec(0)) \
-                            + infer_msg.affineMatrix_inv(0, 2);
-        float image_bottom = infer_msg.affineMatrix_inv(1, 1) * (bottom - infer_msg.affineVec(1)) \
-                            + infer_msg.affineMatrix_inv(1, 2);
-
-        if ( image_left < 0 || image_top< 0 ) {
-            continue;
-        }
-
-        boxes.emplace_back(image_left, image_top, image_right, image_bottom, confidence, label);
+    if ( static_cast<DeviceMode>(parsemsgs->postprocess_mode_) == DeviceMode::GPU_MODE ) {
+        auto nms = Registry::getInstance()->getRegisterFunc<float*, float,\
+               int, int, cudaStream_t>(parsemsgs->nms_type_);
+        nms(det_data_device[0], parsemsgs->nms_threshold_, max_objects, decode_bbox_dim, nullptr);
+    } else {
+        GLOG_ERROR("[AYoloMDetectGpuAchorFree]: Nms non-cuda mode. ");
     }
-
-    auto nms = Registry::getInstance()->getRegisterFunc<float,
-                std::vector<Box>&, std::vector<Box>&>(parsemsgs->nms_type_);
-
-    nms(parsemsgs->nms_threshold_, boxes, box_result);
 }
 
 /**
@@ -202,11 +177,12 @@ inline void PostprocessAYoloMCpuAchorFree(
 inline void PostprocessAYoloMGpuAchorFree(
     InfertMsg& infer_msg,
     std::vector<float*>& predict,
+    std::vector<float*>& det_data_device,
     std::vector<uint8_t*>& seg_data_device,
     std::shared_ptr<ParseMsgs>& parsemsgs) {
 
     // bbox decode
-    // AYoloMDetectGpuAchorFree(infer_msg, multitask_result.box_result, predict, parsemsgs);
+    AYoloMDetectGpuAchorFree(infer_msg, predict, det_data_device, parsemsgs);
 
     // seg decode
     AYoloMSegGpuAchorFree(infer_msg, predict, seg_data_device, parsemsgs);

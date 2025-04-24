@@ -49,10 +49,10 @@ Visit our documentation to learn more.
 - Model: The deployed model is the 's' version of the YOLO multi-task network series.
 - Quantize: Quantization was performed using NVIDIA's Post-Training Quantization (PTQ) method.
 
-|Model|Platform|Resolution|mAP50-95(fp32)|mAP50(fp32)|mAP50-95(fp16)|mAP50(fp16)|mAP50-95(int8)|mAP50(int8)|
-|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-|[YoloP](https://drive.google.com/drive/folders/1_0YjElSSMCbeTdD2FUbJE6zIHsHhynug)|RTX4060/orin x|640x640|-|-|-|-|-|-|-|
-|[A-YOLOM](https://drive.google.com/drive/folders/1_0YjElSSMCbeTdD2FUbJE6zIHsHhynug)|RTX4060/orin x|480x640|-|-|-|-|-|-|-|
+|Model|Platform|Resolution|mAP50-95(fp32)|mAP50(fp32)|mAP50-95(fp16)|mAP50(fp16)|mAP50-95(int8)|mAP50(int8)|fps(fp32)|
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+|[YoloP](https://drive.google.com/drive/folders/1_0YjElSSMCbeTdD2FUbJE6zIHsHhynug)|RTX4060/orin x|640x640|-|-|-|-|-|-|-|-|
+|[A-YOLOM](https://drive.google.com/drive/folders/1_0YjElSSMCbeTdD2FUbJE6zIHsHhynug)|RTX4060/orin x|480x640|-|-|-|-|-|-|61.8229|
 
 # ![Contribute](https://img.shields.io/badge/how%20to%20contribute-project-brightgreen) Contributing
 Welcome users to participate in these projects. Please refer to [CONTRIBUTING.md](./CONTRIBUTING.md) for the contributing guideline.We encourage you to join the effort and contribute feedback, ideas, and code. You can participate in Working Groups, Working Groups have most of their discussions on [Slack](https://app.slack.com/client/T07U5CEEXCP/C07UKUA9TCJ) or QQ (938558640).
