@@ -78,7 +78,7 @@ int main(int argc, char* argv[]) {
   inference->Init();
   inference->Start();
 
-  std::string filesPath = "/home/selflearning/dataset/BDD100K-mini/val/img";
+  std::string filesPath = path + "/config/data/bdd100k";
   TestDemo(inference.get(), filesPath);
 
   inference->Stop();
