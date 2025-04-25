@@ -1,14 +1,17 @@
 cmake_minimum_required(VERSION 3.10.2)
 
 option(ENABLE_CROSSCOMPILE "Enable crosscomplile for arm platform" OFF)
-set(MODEL_FLAG
-    "default"
-    CACHE STRING "Model configuration flag")
+set(CMAKE_BUILD_TYPE "default" CACHE STRING "Cmake build type")
+set(MODEL_FLAG "default" CACHE STRING "Model configuration flag")
 
-add_definitions("-Wall -g")
 add_compile_options(-std=c++14)
-set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_PATH ${CMAKE_CURRENT_LIST_DIR})
+
+string(TOLOWER "${CMAKE_BUILD_TYPE}" BUILD_FLAG_LOWER)
+if ( ${BUILD_FLAG_LOWER} STREQUAL "debug")
+  add_definitions("-g")
+  set(CMAKE_BUILD_TYPE Debug)
+endif()
 
 include(${CMAKE_CURRENT_LIST_DIR}/cmake/third_library.cmake)
 

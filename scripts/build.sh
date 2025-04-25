@@ -25,6 +25,10 @@ set -e
 parse_args "$@"
 CMAKE_DIR=${HOME_DIR}
 BUILD_DIR=${HOME_DIR}/build_clang
+
+if [ "${Debug_FLAG}" == "ON" ] ; then
+    TBUILD_VERSION="Debug"
+fi
 COMM_ARGS=" -DCMAKE_BUILD_TYPE=${TBUILD_VERSION} -DMODEL_FLAG=${MODEL_FLAG}"
 
 if [ "${CROSS_COMPILE}" == "ON" ] ; then
@@ -32,11 +36,11 @@ if [ "${CROSS_COMPILE}" == "ON" ] ; then
     COMM_ARGS="${COMM_ARGS} -DENABLE_CROSSCOMPILE=ON"
     case ${PLATFORM_FLAG} in
         QNN)
-            BUILD_DIR=${HOME_DIR}/build_qnn_cross
+            BUILD_DIR=${HOME_DIR}/build_qnn_arm
             COMM_ARGS="${COMM_ARGS} ${CMAKE_ARM_ARGS}"
             ;;
         NVIDIA)
-            BUILD_DIR=${HOME_DIR}/build_nv_cross
+            BUILD_DIR=${HOME_DIR}/build_nv_arm
             COMM_ARGS="${COMM_ARGS} ${CMAKE_ARM_ARGS}"
             ;;
     esac

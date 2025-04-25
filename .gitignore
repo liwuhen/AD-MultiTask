@@ -1,0 +1,8 @@
+
+build_clang/
+build_nv_x86/
+build_nv_arm/
+build_qnn_x86/
+build_qnn_arm/
+install_nvidia/
+.vscode/

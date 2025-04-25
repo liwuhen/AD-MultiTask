@@ -33,6 +33,7 @@ CMAKE_ARM_ARGS="-DCMAKE_TOOLCHAIN_FILE=${CMAKE_COMPILER_PATH}"
 
 # configure  param
 PACK_FLAG=OFF
+Debug_FLAG=OFF
 CLEAN_FLAG=OFF
 PC_X86_FLAG=OFF
 CROSS_COMPILE=OFF
@@ -82,6 +83,7 @@ function parse_args()
                 -arm)    CROSS_COMPILE=ON     ;;
                 -x86)    PC_X86_FLAG=ON       ;;
                 -pack)   PACK_FLAG=ON         ;;
+                -debug)  Debug_FLAG=ON        ;;
                 *)       FUN_BOOL_FLAG=False  ;;
             esac
         else
@@ -117,7 +119,8 @@ Available parameters are as follows:
     2) -clean. Clear compiled files
     3) -arm.   Enable cross-compilation mode
     4) -x86.   Enable x86 mode
-    5) -pack.  Packaging of executables and dynamic libraries\e[0m"
+    5) -pack.  Packaging of executables and dynamic libraries\e[0m
+    6) -debug, Enable debug mode, default: Release"
         exit 1
     fi
 
