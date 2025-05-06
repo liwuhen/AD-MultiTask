@@ -70,6 +70,7 @@ void ParseMsgs::ReadYamlParam() {
 
   det_head_num_          = app_config->get_det_head_num_();
   seg_head_num_          = app_config->get_seg_head_num_();
+  real_time_             = app_config->get_real_time_();
   visual_mode_           = app_config->get_visual_mode_();
   detect_mode_           = app_config->get_detect_mode_();
   seg_lane_mode_         = app_config->get_seg_lane_mode_();

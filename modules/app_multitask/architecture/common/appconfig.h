@@ -62,6 +62,7 @@ class AppConfig {
 
   REG_CUS_VAR(home_path_);
   REG_YAML_VAR(bool, is_init_);
+  REG_YAML_VAR(bool, real_time_);
   REG_YAML_VAR(bool, visual_mode_);
   REG_YAML_VAR(bool, detect_mode_);
   REG_YAML_VAR(bool, seg_lane_mode_);

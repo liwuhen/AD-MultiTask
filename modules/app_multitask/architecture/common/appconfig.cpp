@@ -22,6 +22,7 @@ AppConfig* AppConfig::pinstance_(nullptr);
 std::mutex AppConfig::mutex_;
 YAML::Node AppConfig::yaml_node_;
 bool AppConfig::is_init_;
+bool AppConfig::real_time_;
 bool AppConfig::visual_mode_;
 bool AppConfig::detect_mode_;
 bool AppConfig::seg_lane_mode_;
@@ -147,6 +148,7 @@ AppConfig::AppConfig(const std::string& config_filename) : config_filename_(conf
 
   det_head_num_     = yaml_node_["predict_config"]["det_head_num"].as<int>();
   seg_head_num_     = yaml_node_["predict_config"]["seg_head_num"].as<int>();
+  real_time_        = yaml_node_["visual_config"]["real_time"].as<bool>();
   visual_mode_      = yaml_node_["visual_config"]["visual_mode"].as<bool>();
   detect_mode_      = yaml_node_["visual_config"]["detect_mode"].as<bool>();
   seg_lane_mode_    = yaml_node_["visual_config"]["seg_lane_mode"].as<bool>();

@@ -116,7 +116,7 @@ bool DecodeProcessor::Inference(std::vector<float*>& predict,
   callbackMsg.emplace_back(msg);
 
   if ( parsemsgs_->visual_mode_ ) {
-    VisualizationMultiTask(false, infer_msg.image, infer_msg.index, multitask_result);
+    VisualizationMultiTask(parsemsgs_->real_time_, infer_msg.image, infer_msg.index, multitask_result);
   }
 
   return true;

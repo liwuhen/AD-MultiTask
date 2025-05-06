@@ -60,6 +60,7 @@ class ParseMsgs {
 
  public:
   bool is_init_;
+  bool real_time_;        // Real time mode true || false
   bool visual_mode_;      // Visual mode true || false
   bool detect_mode_;      // Detect mode true || false
   bool seg_lane_mode_;    // SEG lane  true || false

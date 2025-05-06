@@ -41,16 +41,16 @@ include_directories(
 
 link_libraries(${GLOG_DIR}/lib/libglog.a ${GFLAGS_DIR}/lib/libgflags.a)
 
-if ( ${BUILD_FLAG_LOWER} STREQUAL "debug" )
-  set(CMAKE_CXX_FLAGS
-      "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -O0 -Wfatal-errors -pthread -g")
-  set(CUDA_NVCC_FLAGS -O3;-G;-g; 
-      "${CUDA_NVCC_FLAGS} -std=c++11 -O0 -Xcompiler -fPIC -g -G -w ${CUDA_GEN_CODE}")
-elseif( ${BUILD_FLAG_LOWER} STREQUAL "release" )
-  set(CMAKE_CXX_FLAGS
-      "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -Wfatal-errors -pthread -w")
-  set(CUDA_NVCC_FLAGS -O3;
-      "${CUDA_NVCC_FLAGS} -std=c++11 -O3 -Xcompiler -fPIC -w ${CUDA_GEN_CODE}")
+if ( "${BUILD_FLAG_LOWER}" STREQUAL "debug" )
+  set(CMAKE_CXX_FLAGS_DEBUG 
+      "-std=c++14 -Wall -O0 -Wfatal-errors -pthread -g")
+  set(CUDA_NVCC_FLAGS
+      "-std=c++14 -O0 -Xcompiler -fPIC -g -G -w ${CUDA_GEN_CODE}")
+elseif( "${BUILD_FLAG_LOWER}" STREQUAL "release" )
+  set(CMAKE_CXX_FLAGS_RELEASE 
+      "-std=c++14 -O3 -Wfatal-errors -pthread -w")
+  set(CUDA_NVCC_FLAGS
+      "-std=c++14 -O3 -Xcompiler -fPIC -w ${CUDA_GEN_CODE}")
 endif()
 
 file(
