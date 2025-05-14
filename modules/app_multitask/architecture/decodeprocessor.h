@@ -195,7 +195,7 @@ class DecodeProcessor : public InferModuleBase {
   InfertMsg output_msg_;
 
   std::vector<float *> det_data_host_;
-  std::vector<float*> det_data_device_;
+  std::vector<float *> det_data_device_;
   std::vector<uint8_t *> seg_data_device_;
 
   shared_ptr<ParseMsgs> parsemsgs_;

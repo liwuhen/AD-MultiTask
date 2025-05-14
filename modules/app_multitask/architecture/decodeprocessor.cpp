@@ -221,7 +221,7 @@ void DecodeProcessor::ScaleBoxes(vector<Box>& box_result) {
 }
 
 /**
- * @description: Cpu decode．
+ * @description: decode．
  */
 void DecodeProcessor::Decode(std::vector<float*>& predict,
     InfertMsg& infer_msg, MultiTaskMsg& multitask_result) {
@@ -253,7 +253,7 @@ void DecodeProcessor::Decode(std::vector<float*>& predict,
     for ( int ind = 0; ind < num_boxes; ind++ ) {
       float* ptr = det_data_host_[0] + 1 + parsemsgs_->decode_bbox_dim_ * ind;
       int keep_flag = ptr[6];
-      if( keep_flag ){
+      if( keep_flag ) {
           multitask_result.box_result.emplace_back(
             ptr[0], ptr[1], ptr[2], ptr[3], ptr[4], (int)ptr[5]);
       }
@@ -267,12 +267,10 @@ void DecodeProcessor::Decode(std::vector<float*>& predict,
 bool DecodeProcessor::MemAllocator() {
   for ( int ind = 0; ind < parsemsgs_->seg_head_num_; ind++ ) {
     checkRuntime(cudaMalloc(&seg_data_device_[ind], sizeof(uint8_t) * input_size_));
-    checkRuntime(cudaMemset(seg_data_device_[ind], 0, input_size_ * sizeof(uint8_t))); // 初始化设备内存为0
   }
   for ( int ind = 0; ind < parsemsgs_->det_head_num_; ind++ ) {
     checkRuntime(cudaMalloc(&det_data_device_[ind], sizeof(float) * output_size_));
     checkRuntime(cudaMallocHost(&det_data_host_[ind], sizeof(float) * output_size_));
-    checkRuntime(cudaMemset(det_data_device_[ind], 0, output_size_ * sizeof(float))); // 初始化设备内存为0
   }
 
   return true;
@@ -288,6 +286,10 @@ bool DecodeProcessor::ResetMemory() {
   for ( int ind = 0; ind < parsemsgs_->det_head_num_; ind++ ) {
     checkRuntime(cudaMemset(det_data_device_[ind], 0, output_size_ * sizeof(float))); // 初始化设备内存为0
   }
+
+  checkRuntime(cudaDeviceSynchronize());
+
+  return true;
 }
 
 /**
