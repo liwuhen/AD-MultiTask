@@ -10,10 +10,11 @@ file(MAKE_DIRECTORY ${POSTPRECESSOR_OUTPUT_DIR})
 file(
   GLOB_RECURSE
   OPENCV_LIBS
-  "${OPENCV_DIR}/lib/libopencv_core.so.3.4"
-  "${OPENCV_DIR}/lib/libopencv_imgcodecs.so.3.4"
-  "${OPENCV_DIR}/lib/libopencv_imgproc.so.3.4"
-  "${OPENCV_DIR}/lib/libopencv_highgui.so.3.4")
+  "${OPENCV_DIR}/lib_${APP_STR}/libopencv_core.so.3.4"
+  "${OPENCV_DIR}/lib_${APP_STR}/libopencv_imgcodecs.so.3.4"
+  "${OPENCV_DIR}/lib_${APP_STR}/libopencv_imgproc.so.3.4"
+  "${OPENCV_DIR}/lib_${APP_STR}/libopencv_highgui.so.3.4"
+  "${OPENCV_DIR}/lib_${APP_STR}/libopencv_videoio.so.3.4")
 
 # copy opencv libs
 foreach(lib ${OPENCV_LIBS})

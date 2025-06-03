@@ -37,7 +37,7 @@ include_directories(
   ${CMAKE_PATH}/modules/common/msg_enum
   ${CMAKE_PATH}/modules/common/msg_struct)
 
-link_libraries(${GLOG_DIR}/lib/libglog.a ${GFLAGS_DIR}/lib/libgflags.a)
+link_libraries(${GFLAGS_DIR}/lib/libgflags.a ${GLOG_DIR}/lib/libglog.a)
 
 if ( "${BUILD_FLAG_LOWER}" STREQUAL "debug" )
   set(CMAKE_CXX_FLAGS_DEBUG 
@@ -84,7 +84,7 @@ set_target_properties(
 
 add_library(${PROJECT_NAME} SHARED ${CPP_SRCS})
 
-target_link_libraries(${PROJECT_NAME} nvinfer nvinfer_plugin nvonnxparser)
+target_link_libraries(${PROJECT_NAME} cudart nvinfer nvinfer_plugin nvonnxparser)
 target_link_libraries(${PROJECT_NAME} ${MODEL_FLAG}_gpu_proprecessor ${MODEL_FLAG}_gpu_decode)
 target_link_libraries(${PROJECT_NAME} yaml-cpp ${EIGIN_DIR})
 target_link_libraries(${PROJECT_NAME} opencv_core opencv_imgcodecs

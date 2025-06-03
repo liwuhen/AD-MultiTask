@@ -107,8 +107,8 @@ Available model parameters are as follows:
     1) yolop    2) a_yolom \e[0m"
             exit 1
     fi
-    # check platform
-    if [ "$PLATFORM_BOOL_FLAG" == "False" ] ; then
+    # check platform PLATFORM_BOOL_FLAG=False
+    if [[ "$PLATFORM_BOOL_FLAG" == "False" ]] ; then
         echo -e "\e[1m\e[34m[Bash-Model-${TIME}]: parameters not in platform sets.
 Available platform parameters are as follows:
     1) NVIDIA Orin X    2) NVIDIA Thor \e[0m"
