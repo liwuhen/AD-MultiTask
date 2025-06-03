@@ -1,8 +1,9 @@
 
 build_clang/
-build_nv_x86/
-build_nv_arm/
-build_qnn_x86/
-build_qnn_arm/
-install_nvidia/
+build_orin_x86/
+build_orin_arm/
+build_thor_x86/
+build_thor_arm/
+install_orin/
+install_thor/
 .vscode/

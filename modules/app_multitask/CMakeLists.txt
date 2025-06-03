@@ -1,17 +1,15 @@
-cmake_minimum_required(VERSION 3.10.2)
-project(${MODEL_FLAG}_project)
 
-set(LIBS "${PROJECT_SOURCE_DIR}/${MODEL_FLAG}_bin/${COMPILER_DIR_FLAG}/libs")
+set(LIBS "${CMAKE_CURRENT_LIST_DIR}/${MODEL_FLAG}_bin/${COMPILER_DIR_FLAG}/libs")
 set(CONFIG_PATH
-    "${PROJECT_SOURCE_DIR}/${MODEL_FLAG}_bin/${COMPILER_DIR_FLAG}/config")
+    "${CMAKE_CURRENT_LIST_DIR}/${MODEL_FLAG}_bin/${COMPILER_DIR_FLAG}/config")
 set(THIRD_PARTY
-    "${PROJECT_SOURCE_DIR}/${MODEL_FLAG}_bin/${COMPILER_DIR_FLAG}/third_party")
+    "${CMAKE_CURRENT_LIST_DIR}/${MODEL_FLAG}_bin/${COMPILER_DIR_FLAG}/third_party")
 set(WORKSPACE_PATH
-    "${PROJECT_SOURCE_DIR}/${MODEL_FLAG}_bin/${COMPILER_DIR_FLAG}/workspace")
+    "${CMAKE_CURRENT_LIST_DIR}/${MODEL_FLAG}_bin/${COMPILER_DIR_FLAG}/workspace")
 set(PROCESSOR_OUTPUT_DIR
-    "${PROJECT_SOURCE_DIR}/${MODEL_FLAG}_bin/${COMPILER_DIR_FLAG}/proprecessor")
+    "${CMAKE_CURRENT_LIST_DIR}/${MODEL_FLAG}_bin/${COMPILER_DIR_FLAG}/proprecessor")
 set(POSTPRECESSOR_OUTPUT_DIR
-    "${PROJECT_SOURCE_DIR}/${MODEL_FLAG}_bin/${COMPILER_DIR_FLAG}/postprecessor"
+    "${CMAKE_CURRENT_LIST_DIR}/${MODEL_FLAG}_bin/${COMPILER_DIR_FLAG}/postprecessor"
 )
 
 find_package(CUDA REQUIRED)
@@ -19,18 +17,18 @@ find_package(CUDA REQUIRED)
 # ##############################################################################
 # Build ##
 # ##############################################################################
-
 include_directories(
-  ${PROJECT_SOURCE_DIR}/app
-  ${PROJECT_SOURCE_DIR}/appinterface
-  ${PROJECT_SOURCE_DIR}/architecture
-  ${PROJECT_SOURCE_DIR}/architecture/cuda
-  ${PROJECT_SOURCE_DIR}/architecture/common
-  ${PROJECT_SOURCE_DIR}/architecture/decode
-  ${PROJECT_SOURCE_DIR}/architecture/module
-  ${PROJECT_SOURCE_DIR}/architecture/quantize
-  ${PROJECT_SOURCE_DIR}/architecture/template
-  ${PROJECT_SOURCE_DIR}/architecture/preprocess
+  ${CMAKE_CURRENT_LIST_DIR}/app
+  ${CMAKE_CURRENT_LIST_DIR}/appinterface
+  ${CMAKE_CURRENT_LIST_DIR}/architecture
+  ${CMAKE_CURRENT_LIST_DIR}/architecture/trt
+  ${CMAKE_CURRENT_LIST_DIR}/architecture/cuda
+  ${CMAKE_CURRENT_LIST_DIR}/architecture/common
+  ${CMAKE_CURRENT_LIST_DIR}/architecture/decode
+  ${CMAKE_CURRENT_LIST_DIR}/architecture/module
+  ${CMAKE_CURRENT_LIST_DIR}/architecture/quantize
+  ${CMAKE_CURRENT_LIST_DIR}/architecture/template
+  ${CMAKE_CURRENT_LIST_DIR}/architecture/preprocess
   ${CMAKE_PATH}/modules/benchmark
   ${CMAKE_PATH}/modules/common/json
   ${CMAKE_PATH}/modules/common/utils
@@ -56,23 +54,23 @@ endif()
 file(
   GLOB_RECURSE
   CPP_SRCS
-  ${PROJECT_SOURCE_DIR}/app/*.cpp
-  ${PROJECT_SOURCE_DIR}/appinterface/*.cpp
-  ${PROJECT_SOURCE_DIR}/architecture/*.cpp
-  ${PROJECT_SOURCE_DIR}/architecture/cuda/*.cpp
-  ${PROJECT_SOURCE_DIR}/architecture/common/*.cpp
-  ${PROJECT_SOURCE_DIR}/architecture/decode/*.cpp
-  ${PROJECT_SOURCE_DIR}/architecture/template/*.cc
+  ${CMAKE_CURRENT_LIST_DIR}/app/*.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/appinterface/*.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/architecture/*.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/architecture/cuda/*.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/architecture/common/*.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/architecture/decode/*.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/architecture/template/*.cc
   ${CMAKE_PATH}/modules/common/logging/*.cpp
   ${CMAKE_PATH}/modules/common/json/*.cpp)
 
 cuda_add_library(${MODEL_FLAG}_gpu_proprecessor SHARED
-                 ${PROJECT_SOURCE_DIR}/architecture/cuda/warpaffine.cu)
+                 ${CMAKE_CURRENT_LIST_DIR}/architecture/cuda/warpaffine.cu)
 
 cuda_add_library(${MODEL_FLAG}_gpu_decode SHARED
-                 ${PROJECT_SOURCE_DIR}/architecture/cuda/gpu_decode.cu
-                 ${PROJECT_SOURCE_DIR}/architecture/cuda/gpu_seg.cu
-                 ${PROJECT_SOURCE_DIR}/architecture/cuda/gpu_nms.cu)
+                 ${CMAKE_CURRENT_LIST_DIR}/architecture/cuda/gpu_decode.cu
+                 ${CMAKE_CURRENT_LIST_DIR}/architecture/cuda/gpu_seg.cu
+                 ${CMAKE_CURRENT_LIST_DIR}/architecture/cuda/gpu_nms.cu)
 
 set_target_properties(
   ${MODEL_FLAG}_gpu_proprecessor

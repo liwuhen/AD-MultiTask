@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.10.2)
 option(ENABLE_CROSSCOMPILE "Enable crosscomplile for arm platform" OFF)
 set(CMAKE_BUILD_TYPE "default" CACHE STRING "Cmake build type")
 set(MODEL_FLAG "default" CACHE STRING "Model configuration flag")
+set(HARDWARE_PLATFORM_FLAG "default" CACHE STRING "PLATFORM configuration flag")
+
+project(${MODEL_FLAG}_project)
 
 add_compile_options(-std=c++14)
 set(CMAKE_PATH ${CMAKE_CURRENT_LIST_DIR})
@@ -14,10 +17,6 @@ if ( ${BUILD_FLAG_LOWER} STREQUAL "debug")
 endif()
 
 include(${CMAKE_CURRENT_LIST_DIR}/cmake/third_library.cmake)
-
-if(${ENABLE_CROSSCOMPILE})
-  include(${CMAKE_PATH}/platforms/linux/arm-toolchain.cmake)
-endif()
 
 configure_file("${CMAKE_CURRENT_LIST_DIR}/modules/common/utils/std_cmake.h.in"
                "${CMAKE_CURRENT_LIST_DIR}/modules/common/utils/std_cmake.h")

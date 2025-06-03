@@ -29,33 +29,33 @@ BUILD_DIR=${HOME_DIR}/build_clang
 if [ "${Debug_FLAG}" == "ON" ] ; then
     TBUILD_VERSION="Debug"
 fi
-COMM_ARGS=" -DCMAKE_BUILD_TYPE=${TBUILD_VERSION} -DMODEL_FLAG=${MODEL_FLAG}"
+COMM_ARGS=" -DCMAKE_BUILD_TYPE=${TBUILD_VERSION} -DMODEL_FLAG=${MODEL_FLAG} 
+            -DHARDWARE_PLATFORM_FLAG=${HARDWARE_PLATFORM_FLAG}"
 
 if [ "${CROSS_COMPILE}" == "ON" ] ; then
     COMPILER_FLAG="arm"
-    COMM_ARGS="${COMM_ARGS} -DENABLE_CROSSCOMPILE=ON"
-    case ${PLATFORM_FLAG} in
-        QNN)
-            BUILD_DIR=${HOME_DIR}/build_qnn_arm
+    case ${HARDWARE_PLATFORM_FLAG} in
+        ORIN)
+            AARCM_FLAG=9.x
+            BUILD_DIR=${HOME_DIR}/build_orin_arm
             COMM_ARGS="${COMM_ARGS} ${CMAKE_ARM_ARGS}"
             ;;
-        NVIDIA)
-            BUILD_DIR=${HOME_DIR}/build_nv_arm
+        THOR)
+            AARCM_FLAG=12.x
+            BUILD_DIR=${HOME_DIR}/build_thor_arm
             COMM_ARGS="${COMM_ARGS} ${CMAKE_ARM_ARGS}"
             ;;
     esac
+    COMM_ARGS="${COMM_ARGS} -DENABLE_CROSSCOMPILE=ON -DAARCM_FLAG=${AARCM_FLAG}"
 elif [ "${PC_X86_FLAG}" == "ON" ] ; then
-    if [ "${PLATFORM_FLAG}" == "NVIDIA" ] ; then
-        BUILD_DIR=${HOME_DIR}/build_nv_x86
-        # COMM_ARGS="${COMM_ARGS}"
-
-    elif [ "${PLATFORM_FLAG}" == "QNN" ] ; then
-        BUILD_DIR=${HOME_DIR}/build_qnn_x86
-        # COMM_ARGS="${COMM_ARGS}"
+    if [ "${HARDWARE_PLATFORM_FLAG}" == "ORIN" ] ; then
+        BUILD_DIR=${HOME_DIR}/build_orin_x86
+    elif [ "${HARDWARE_PLATFORM_FLAG}" == "THOR" ] ; then
+        BUILD_DIR=${HOME_DIR}/build_thor_x86
     fi
 fi
 
-echo -e "\e[1m\e[34m[Bash-Platform-${TIME}]: compiler platform: ${PLATFORM_FLAG} \e[0m"
+echo -e "\e[1m\e[34m[Bash-Platform-${TIME}]: compiler platform: ${PLATFORM_FLAG}-${HARDWARE_PLATFORM_FLAG} \e[0m"
 
 if [ "${CLEAN_FLAG}" == "ON" ] ; then
     rm -rf "${BUILD_DIR}"
@@ -82,7 +82,7 @@ make -j8 && cd ..
 if [ "${PACK_FLAG}" == "ON" ] ; then
 
     # install
-    INSTALL_PATH=${HOME_DIR}/install_${PLATFORM_FLAG,,}/${MODEL_FLAG}_bin
+    INSTALL_PATH=${HOME_DIR}/install_${HARDWARE_PLATFORM_FLAG,,}/${MODEL_FLAG}_bin
     if [ -d "$INSTALL_PATH" ]; then
         echo -e "\e[1m\e[34m[Bash-Pack-${TIME}]: $INSTALL_PATH  \e[0m"
     else
@@ -103,7 +103,7 @@ if [ "${PACK_FLAG}" == "ON" ] ; then
     rm -rf "${HOME_DIR}"/modules/"${LIB_PATH}"/"${MODEL_FLAG}"_bin
     rm -rf "${HOME_DIR}"/runapp/"${APP_PATH}"/"${MODEL_FLAG}"_bin
 
-    cp -r "${HOME_DIR}"/scripts/run.sh "${HOME_DIR}"/install_"${PLATFORM_FLAG,,}"
+    cp -r "${HOME_DIR}"/scripts/run.sh "${HOME_DIR}"/install_"${HARDWARE_PLATFORM_FLAG,,}"
     echo -e "\e[1m\e[34m[Bash-Pack-${TIME}]: copy ${COMPILER_FLAG} ${MODEL_FLAG} bin to install  \e[0m"
 
 else
