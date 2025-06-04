@@ -93,6 +93,7 @@ if [ "${PACK_FLAG}" == "ON" ] ; then
         rm -rf "${INSTALL_PATH}"/x86
         mv "${HOME_DIR}"/modules/"${LIB_PATH}"/"${MODEL_FLAG}"_bin/x86 "${INSTALL_PATH}"
         mv "${HOME_DIR}"/runapp/"${APP_PATH}"/"${MODEL_FLAG}"_bin/x86/*  "${INSTALL_PATH}"/x86
+        mv "${HOME_DIR}"/modules/backend/tensorrt/"${MODEL_FLAG}"_bin/x86/*  "${INSTALL_PATH}"/x86
 
     elif [ "${CROSS_COMPILE}" == "ON" ] ; then
         rm -rf "${INSTALL_PATH}"/arm
@@ -102,6 +103,7 @@ if [ "${PACK_FLAG}" == "ON" ] ; then
 
     rm -rf "${HOME_DIR}"/modules/"${LIB_PATH}"/"${MODEL_FLAG}"_bin
     rm -rf "${HOME_DIR}"/runapp/"${APP_PATH}"/"${MODEL_FLAG}"_bin
+    rm -rf "${HOME_DIR}"/modules/backend/tensorrt/"${MODEL_FLAG}"_bin
 
     cp -r "${HOME_DIR}"/scripts/run.sh "${HOME_DIR}"/install_"${HARDWARE_PLATFORM_FLAG,,}"
     echo -e "\e[1m\e[34m[Bash-Pack-${TIME}]: copy ${COMPILER_FLAG} ${MODEL_FLAG} bin to install  \e[0m"

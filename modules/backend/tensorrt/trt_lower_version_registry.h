@@ -16,8 +16,8 @@
 * ===================================================================
 */
 
-#ifndef APP_MULTITASK_TRT_INFER_H__
-#define APP_MULTITASK_TRT_INFER_H__
+#ifndef APP_MULTITASK_TRT_LOWER_INFER_H__
+#define APP_MULTITASK_TRT_LOWER_INFER_H__
 
 #include <glog/logging.h>
 #include <math.h>
@@ -42,6 +42,7 @@
 #include "file.hpp"
 #include "calibrator.hpp"
 #include "function_registry.hpp"
+#include "class_factory.h"
 
 /**
  * @namespace hpc::appinfer
@@ -56,13 +57,13 @@ using namespace nvonnxparser;
 using namespace hpc::common;
 
 /**
- * @class TrtInfer.
- * @brief Trt model infer.
+ * @class TrtLowerVersionInfer.
+ * @brief Trt lower version model infer.
  */
-class TrtInfer : public InferModuleBase {
+class TrtLowerVersionInfer : public InferModuleBase {
  public:
-  TrtInfer();
-  ~TrtInfer();
+  TrtLowerVersionInfer();
+  ~TrtLowerVersionInfer();
 
   /**
    * @brief     init．
@@ -188,4 +189,4 @@ class TrtInfer : public InferModuleBase {
 }  // namespace appinfer
 }  // namespace hpc
 
-#endif  // APP_MULTITASK_TRT_INFER_H__
+#endif  // APP_MULTITASK_TRT_LOWER_INFER_H__

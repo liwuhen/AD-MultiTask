@@ -25,7 +25,7 @@
 #include <memory>
 #include <mutex>
 
-#include "parseconfig.h"
+#include "appconfig/parseconfig.h"
 
 namespace hpc {
 namespace common {

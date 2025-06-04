@@ -168,7 +168,7 @@ bool InferenceEngine::Inference() {
 
     // decode bbox
     begin_timer = timestamp_now_float();
-    if (!decodeProcessor_->Inference(trtInfer_->output_buffers_, \
+    if (!decodeProcessor_->Inference(trtInfer_->GetOutputBuffer(), \
         input_msg_, callbackMsg, bboxQueue_)) {
       GLOG_ERROR("Decode module error. ");
       return false;
@@ -195,12 +195,12 @@ bool InferenceEngine::Inference() {
  */
 bool InferenceEngine::InferenceV1() {
   // 数据处理
-  LOG(INFO) << " Begin inferenceV1 ... ";
-  auto image = cv::imread(parsemsgs_->img_path_);
-  auto data = trtInfer_->LoadFile(parsemsgs_->predict_path_);
-  float* ptr = reinterpret_cast<float*>(data.data());
-  int nelem = data.size() / sizeof(float);
-  int nrows = nelem / 6.0;  // 行数，预测的 object 的数量
+  // LOG(INFO) << " Begin inferenceV1 ... ";
+  // auto image = cv::imread(parsemsgs_->img_path_);
+  // auto data = trtInfer_->LoadFile(parsemsgs_->predict_path_);
+  // float* ptr = reinterpret_cast<float*>(data.data());
+  // int nelem = data.size() / sizeof(float);
+  // int nrows = nelem / 6.0;  // 行数，预测的 object 的数量
 
   // InfertMsg msg;
   // msg.width     = image.cols;

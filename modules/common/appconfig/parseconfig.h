@@ -77,6 +77,7 @@ class ParseMsgs {
   int class_num_;        // Dataset calss num
   int model_acc_;        // Model quantisation accuracy
   int branch_num_;       // Model branch number
+  int trt_version_;      // Trt version
   int batchsizes_;       // Batch size
   int batch_mode_;       // Batch mode, 0-static batch, 1-dynamic batch
   int decode_type_;      // Decode type

@@ -44,6 +44,7 @@ void ParseMsgs::ReadYamlParam() {
   batch_mode_     = app_config->get_batch_mode_();
   branch_num_     = app_config->get_branch_num_();
   batchsizes_     = app_config->get_batchsizes_();
+  trt_version_    = app_config->get_trt_version_();
   det_branchs_dim_= app_config->get_det_branchs_dim_();
   det_predict_dim_= app_config->get_det_predict_dim_();
   decode_type_    = app_config->get_decode_type_();

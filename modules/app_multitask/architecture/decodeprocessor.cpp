@@ -91,7 +91,7 @@ bool DecodeProcessor::DataResourceRelease() {}
 /**
  * @description: Inference
  */
-bool DecodeProcessor::Inference(std::vector<float*>& predict,
+bool DecodeProcessor::Inference(const std::vector<float*>& predict,
     InfertMsg& infer_msg,
     std::vector<InfertMsg>& callbackMsg,
     std::shared_ptr<InferMsgQue>& bboxQueue) {
@@ -223,7 +223,7 @@ void DecodeProcessor::ScaleBoxes(vector<Box>& box_result) {
 /**
  * @description: decode．
  */
-void DecodeProcessor::Decode(std::vector<float*>& predict,
+void DecodeProcessor::Decode(const std::vector<float*>& predict,
     InfertMsg& infer_msg, MultiTaskMsg& multitask_result) {
 
   auto postprocess = Registry::getInstance()->getRegisterFunc<InfertMsg&, std::vector<float*>&,
@@ -232,11 +232,11 @@ void DecodeProcessor::Decode(std::vector<float*>& predict,
   // Copy results back to host
   if ( static_cast<DeviceMode>(parsemsgs_->postprocess_mode_) == DeviceMode::CPU_MODE ) {
     auto postprocess = Registry::getInstance()->getRegisterFunc<InfertMsg&, MultiTaskMsg&,
-                     std::vector<float*>&, std::shared_ptr<ParseMsgs>&>(parsemsgs_->postprocess_type_);
+                     const std::vector<float*>&, std::shared_ptr<ParseMsgs>&>(parsemsgs_->postprocess_type_);
     postprocess(infer_msg, multitask_result, predict, parsemsgs_);
 
   } else if ( static_cast<DeviceMode>(parsemsgs_->postprocess_mode_) == DeviceMode::GPU_MODE ) {
-    auto postprocess = Registry::getInstance()->getRegisterFunc<InfertMsg&, std::vector<float*>&,\
+    auto postprocess = Registry::getInstance()->getRegisterFunc<InfertMsg&, const std::vector<float*>&,\
           std::vector<float*>&, std::vector<uint8_t*>&, std::shared_ptr<ParseMsgs>&>(parsemsgs_->postprocess_type_);
     postprocess(infer_msg, predict, det_data_device_, seg_data_device_, parsemsgs_);
 

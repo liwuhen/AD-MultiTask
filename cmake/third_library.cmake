@@ -43,6 +43,10 @@ include_directories(
   ${TENSORRT_DIR}/include
   ${CUDA_TOOLKIT_ROOT_DIR}/include)
 
+# link_directories(
+#   ${GFLAGS_DIR}/lib ${GLOG_DIR}/lib  ${OPENCV_DIR}/lib_${APP_STR} ${YAMLCPP_DIR}/lib
+#   ${TENSORRT_DIR}/lib/stubs ${CUDA_TOOLKIT_ROOT_DIR}/lib)
+
 link_directories(
-  ${GFLAGS_DIR}/lib ${GLOG_DIR}/lib  ${OPENCV_DIR}/lib_${APP_STR} ${YAMLCPP_DIR}/lib
+  ${OPENCV_DIR}/lib_${APP_STR} ${YAMLCPP_DIR}/lib
   ${TENSORRT_DIR}/lib/stubs ${CUDA_TOOLKIT_ROOT_DIR}/lib)

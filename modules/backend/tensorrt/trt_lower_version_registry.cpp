@@ -16,19 +16,19 @@
 * ===================================================================
 */
 
-#include "trt_infer.h"
+#include "trt_lower_version_registry.h"
 
 namespace hpc {
 namespace appinfer {
 
-TrtInfer::TrtInfer() {}
+TrtLowerVersionInfer::TrtLowerVersionInfer() {}
 
-TrtInfer::~TrtInfer() {}
+TrtLowerVersionInfer::~TrtLowerVersionInfer() {}
 
 /**
  * @description: init．
  */
-bool TrtInfer::Init() {
+bool TrtLowerVersionInfer::Init() {
 
   // onnx model loading, trt model generation
   if (!isFileExists_stat(parsemsgs_->trt_path_)) {
@@ -51,59 +51,59 @@ bool TrtInfer::Init() {
     return false;
   }
 
-  GLOG_INFO("[Init]: Trt infer module init ");
+  GLOG_INFO("[Init]: Trt lower version infer module init ");
   return true;
 }
 
 /**
  * @description: The inference algorithm handles threads．
  */
-bool TrtInfer::RunStart() {
-  GLOG_INFO("[RunStart]: Trt infer module start ");
+bool TrtLowerVersionInfer::RunStart() {
+  GLOG_INFO("[RunStart]: Trt lower version infer module start ");
   return true;
 }
 
 /**
  * @description: Thread stop．
  */
-bool TrtInfer::RunStop() {
-  GLOG_INFO("[RunStop]: Trt infer module stop ");
+bool TrtLowerVersionInfer::RunStop() {
+  GLOG_INFO("[RunStop]: Trt lower version infer module stop ");
   return true;
 }
 
 /**
  * @description: Software function stops．
  */
-bool TrtInfer::RunRelease() {
-  GLOG_INFO("[RunRelease]: TrtInfer module release ");
+bool TrtLowerVersionInfer::RunRelease() {
+  GLOG_INFO("[RunRelease]: TrtLowerVersionInfer module release ");
   return true;
 }
 
 /**
  * @description: Configuration parameters.
  */
-bool TrtInfer::SetParam(shared_ptr<ParseMsgs>& parse_msgs) {
+bool TrtLowerVersionInfer::SetParam(shared_ptr<ParseMsgs>& parse_msgs) {
   if (parse_msgs != nullptr) {
     this->parsemsgs_ = parse_msgs;
   } else {
     this->parsemsgs_ = nullptr;
-    GLOG_ERROR("[SetParam]: TrtInfer module set param failed ");
+    GLOG_ERROR("[SetParam]: TrtLowerVersionInfer module set param failed ");
     return false;
   }
 
-  GLOG_INFO("[SetParam]: Trt infer module set param ");
+  GLOG_INFO("[SetParam]: Trt lower version infer module set param ");
   return true;
 }
 
 /**
  * @description: Module resource release.
  */
-bool TrtInfer::DataResourceRelease() {}
+bool TrtLowerVersionInfer::DataResourceRelease() {}
 
 /**
  * @description: Inference.
  */
-bool TrtInfer::Inference(float* output_img_device) {
+bool TrtLowerVersionInfer::Inference(float* output_img_device) {
   checkRuntime(cudaMemcpy(input_buffers_[engine_name_size_[binding_names_["input"][0]].first],\
       output_img_device, parsemsgs_->dstimg_size_ * sizeof(float), cudaMemcpyDeviceToDevice));
 
@@ -135,7 +135,7 @@ bool TrtInfer::Inference(float* output_img_device) {
 /**
  * @description: Build trt model from onnx.
  */
-bool TrtInfer::BuildModel() {
+bool TrtLowerVersionInfer::BuildModel() {
   GLOG_INFO("=====> Build TensorRT Engine <===== ");
 
   // Configure builder, config and network.
@@ -307,7 +307,7 @@ bool TrtInfer::BuildModel() {
 /**
  * @description: Parse model.
  */
-bool TrtInfer::ParseModel() {
+bool TrtLowerVersionInfer::ParseModel() {
   GLOG_INFO("=====> Begin Deserialize Engine <===== ");
   checkRuntime(cudaStreamCreate(&stream_));
   auto engine_data = LoadFile(parsemsgs_->trt_path_);
@@ -372,7 +372,7 @@ bool TrtInfer::ParseModel() {
 /**
  * @description: Memory allocator.
  */
-bool TrtInfer::MemAllocator() {
+bool TrtLowerVersionInfer::MemAllocator() {
   GLOG_INFO("Begin allocator memory ");
 
   input_buffers_.resize(in_out_size_["input"] + in_out_size_["output"]);
@@ -407,7 +407,7 @@ bool TrtInfer::MemAllocator() {
 /**
  * @description: Cpu and gpu memory free.
  */
-bool TrtInfer::MemFree() {
+bool TrtLowerVersionInfer::MemFree() {
   // free memory
   checkRuntime(cudaStreamDestroy(stream_));
   stream_ = nullptr;
@@ -434,7 +434,7 @@ bool TrtInfer::MemFree() {
 /**
  * @description: Load file.
  */
-std::vector<uint8_t> TrtInfer::LoadFile(const string& file) {
+std::vector<uint8_t> TrtLowerVersionInfer::LoadFile(const string& file) {
   ifstream in(file, ios::in | ios::binary);
   if (!in.is_open()) return {};
 
@@ -454,7 +454,7 @@ std::vector<uint8_t> TrtInfer::LoadFile(const string& file) {
 /**
  * @description: Load image file.
  */
-void TrtInfer::LoadCalibDataFile(const std::string& path,
+void TrtLowerVersionInfer::LoadCalibDataFile(const std::string& path,
     std::vector<string>& data) {
   // 支持的图像扩展名
   static const std::vector<std::string> extensions = {".jpg", ".jpeg", ".png", ".bmp"};
@@ -496,6 +496,8 @@ void TrtInfer::LoadCalibDataFile(const std::string& path,
   }
 
 }
+
+REGISTER_CLASS("TrtLowerVersionInfer", TrtLowerVersionInfer);
 
 }  // namespace appinfer
 }  // namespace hpc

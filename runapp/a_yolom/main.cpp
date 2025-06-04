@@ -19,7 +19,7 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
 
-#include "common/appconfig.h"
+#include "appconfig/appconfig.h"
 #include "interface.h"
 #include "std_time.h"
 #include "cocotojson.hpp"

@@ -75,6 +75,7 @@ class AppConfig {
   REG_YAML_VAR(int, dst_img_h_);
   REG_YAML_VAR(int, dst_img_c_);
   REG_YAML_VAR(int, class_num_);
+  REG_YAML_VAR(int, trt_version_);
   REG_YAML_VAR(int, branch_num_);
   REG_YAML_VAR(int, batchsizes_);
   REG_YAML_VAR(int, decode_type_);

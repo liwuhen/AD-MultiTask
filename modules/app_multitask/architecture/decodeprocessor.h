@@ -112,7 +112,7 @@ class DecodeProcessor : public InferModuleBase {
    * @param[in] [float*, InfertMsg&, std::shared_ptr<InferMsgQue>&].
    * @return    bool.
    */
-  bool Inference(std::vector<float*>& predict, InfertMsg& infer_msg,\
+  bool Inference(const std::vector<float*>& predict, InfertMsg& infer_msg,\
      std::vector<InfertMsg>& callbackMsg, std::shared_ptr<InferMsgQue>& bboxQueue);
 
  private:
@@ -184,7 +184,7 @@ class DecodeProcessor : public InferModuleBase {
    * @param[in] [float*, vector<Box>&]．
    * @return    void.
    */
-  void Decode(std::vector<float*>& predict,
+  void Decode(const std::vector<float*>& predict,
       InfertMsg& infer_msg, MultiTaskMsg& multitask_result);
 
  private:
