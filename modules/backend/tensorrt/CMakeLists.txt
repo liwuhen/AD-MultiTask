@@ -1,7 +1,5 @@
-
 set(BACKEND_OUTPUT_DIR
-  "${CMAKE_CURRENT_LIST_DIR}/${MODEL_FLAG}_bin/${COMPILER_DIR_FLAG}/backend"
-)
+    "${CMAKE_CURRENT_LIST_DIR}/${MODEL_FLAG}_bin/${COMPILER_DIR_FLAG}/backend")
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}/*h)
 include_directories(
@@ -16,7 +14,9 @@ include_directories(
   ${CMAKE_PATH}/modules/common/msg_enum
   ${CMAKE_PATH}/modules/common/msg_struct)
 
-file(GLOB_RECURSE CPP_SRCS
+file(
+  GLOB_RECURSE
+  CPP_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/*.cpp
   ${CMAKE_CURRENT_LIST_DIR}/architecture/common/*.cpp
   ${CMAKE_PATH}/modules/app_multitask/architecture/template/*.cc
@@ -31,5 +31,5 @@ target_link_libraries(${BACKEND} yaml-cpp ${EIGIN_DIR})
 
 set_target_properties(
   ${BACKEND} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${BACKEND_OUTPUT_DIR}"
-  OUTPUT_NAME "${BACKEND}")
+                        OUTPUT_NAME "${BACKEND}")
 install(TARGETS ${BACKEND} LIBRARY DESTINATION ${BACKEND_OUTPUT_DIR})

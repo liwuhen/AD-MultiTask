@@ -1,13 +1,16 @@
-
-set(LIBS "${CMAKE_CURRENT_LIST_DIR}/${MODEL_FLAG}_bin/${COMPILER_DIR_FLAG}/libs")
+set(LIBS
+    "${CMAKE_CURRENT_LIST_DIR}/${MODEL_FLAG}_bin/${COMPILER_DIR_FLAG}/libs")
 set(CONFIG_PATH
     "${CMAKE_CURRENT_LIST_DIR}/${MODEL_FLAG}_bin/${COMPILER_DIR_FLAG}/config")
 set(THIRD_PARTY
-    "${CMAKE_CURRENT_LIST_DIR}/${MODEL_FLAG}_bin/${COMPILER_DIR_FLAG}/third_party")
+    "${CMAKE_CURRENT_LIST_DIR}/${MODEL_FLAG}_bin/${COMPILER_DIR_FLAG}/third_party"
+)
 set(WORKSPACE_PATH
-    "${CMAKE_CURRENT_LIST_DIR}/${MODEL_FLAG}_bin/${COMPILER_DIR_FLAG}/workspace")
+    "${CMAKE_CURRENT_LIST_DIR}/${MODEL_FLAG}_bin/${COMPILER_DIR_FLAG}/workspace"
+)
 set(PROCESSOR_OUTPUT_DIR
-    "${CMAKE_CURRENT_LIST_DIR}/${MODEL_FLAG}_bin/${COMPILER_DIR_FLAG}/preprocessor")
+    "${CMAKE_CURRENT_LIST_DIR}/${MODEL_FLAG}_bin/${COMPILER_DIR_FLAG}/preprocessor"
+)
 set(POSTPRECESSOR_OUTPUT_DIR
     "${CMAKE_CURRENT_LIST_DIR}/${MODEL_FLAG}_bin/${COMPILER_DIR_FLAG}/postprecessor"
 )
@@ -53,10 +56,12 @@ file(
 cuda_add_library(${MODEL_FLAG}_gpu_preprocessor SHARED
                  ${CMAKE_CURRENT_LIST_DIR}/architecture/cuda/warpaffine.cu)
 
-cuda_add_library(${MODEL_FLAG}_gpu_decode SHARED
-                 ${CMAKE_CURRENT_LIST_DIR}/architecture/cuda/gpu_decode.cu
-                 ${CMAKE_CURRENT_LIST_DIR}/architecture/cuda/gpu_seg.cu
-                 ${CMAKE_CURRENT_LIST_DIR}/architecture/cuda/gpu_nms.cu)
+cuda_add_library(
+  ${MODEL_FLAG}_gpu_decode
+  SHARED
+  ${CMAKE_CURRENT_LIST_DIR}/architecture/cuda/gpu_decode.cu
+  ${CMAKE_CURRENT_LIST_DIR}/architecture/cuda/gpu_seg.cu
+  ${CMAKE_CURRENT_LIST_DIR}/architecture/cuda/gpu_nms.cu)
 
 set_target_properties(
   ${MODEL_FLAG}_gpu_preprocessor
@@ -71,8 +76,10 @@ set_target_properties(
 add_library(${PROJECT_NAME} SHARED ${CPP_SRCS})
 
 target_link_libraries(${PROJECT_NAME} cudart yaml-cpp ${EIGIN_DIR})
-target_link_libraries(${PROJECT_NAME} opencv_core opencv_imgcodecs opencv_imgproc opencv_highgui)
-target_link_libraries(${PROJECT_NAME} backend_tensorrt ${MODEL_FLAG}_gpu_preprocessor ${MODEL_FLAG}_gpu_decode)
+target_link_libraries(${PROJECT_NAME} opencv_core opencv_imgcodecs
+                      opencv_imgproc opencv_highgui)
+target_link_libraries(${PROJECT_NAME} backend_tensorrt
+                      ${MODEL_FLAG}_gpu_preprocessor ${MODEL_FLAG}_gpu_decode)
 
 set_target_properties(
   ${PROJECT_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${LIBS}"

@@ -1,15 +1,22 @@
 string(TOLOWER "${HARDWARE_PLATFORM_FLAG}" HARDWARE_PLATFORM)
-set(APP_STR "" CACHE STRING "Application string version")
-if( ${HARDWARE_PLATFORM} STREQUAL "orin" OR ${HARDWARE_PLATFORM} STREQUAL "nvidia" )
-  set(APP_STR "9.x" CACHE STRING "Application string version" FORCE)
+set(APP_STR
+    ""
+    CACHE STRING "Application string version")
+if(${HARDWARE_PLATFORM} STREQUAL "orin" OR ${HARDWARE_PLATFORM} STREQUAL
+                                           "nvidia")
+  set(APP_STR
+      "9.x"
+      CACHE STRING "Application string version" FORCE)
 else()
-  set(APP_STR "12.x" CACHE STRING "Application string version" FORCE)
+  set(APP_STR
+      "12.x"
+      CACHE STRING "Application string version" FORCE)
 endif()
 
-if ( ${ENABLE_CROSSCOMPILE} )
+if(${ENABLE_CROSSCOMPILE})
   set(COMPILER_DIR_FLAG arm)
   set(COMPILER_FLAG aarch64_toolchain)
-  if ( ${HARDWARE_PLATFORM} STREQUAL "orin" ) 
+  if(${HARDWARE_PLATFORM} STREQUAL "orin")
     set(CUDA_TOOLKIT_ROOT_DIR "/home/IM/${COMPILER_FLAG}/cuda11.4")
     set(TENSORRT_DIR "/home/IM/${COMPILER_FLAG}/tensorrt8.4")
   else()
@@ -39,5 +46,5 @@ include_directories(
   ${CUDA_TOOLKIT_ROOT_DIR}/include)
 
 link_directories(
-  ${OPENCV_DIR}/lib_${APP_STR} ${YAMLCPP_DIR}/lib
-  ${GFLAGS_DIR}/lib ${GLOG_DIR}/lib ${TENSORRT_DIR}/lib/stubs ${CUDA_TOOLKIT_ROOT_DIR}/lib)
+  ${OPENCV_DIR}/lib_${APP_STR} ${YAMLCPP_DIR}/lib ${GFLAGS_DIR}/lib
+  ${GLOG_DIR}/lib ${TENSORRT_DIR}/lib/stubs ${CUDA_TOOLKIT_ROOT_DIR}/lib)

@@ -37,7 +37,7 @@ inline void AYoloMDetectCpuAchorFree(
     std::vector<Box>& box_result,
     std::vector<float*>& predict,
     std::shared_ptr<ParseMsgs>& parsemsgs) {
-    
+
     vector<Box> boxes;
     int num_classes = parsemsgs->det_predict_dim_[0][2] - 4;
     for (int i = 0; i < parsemsgs->det_predict_dim_[0][1]; ++i)
@@ -91,7 +91,7 @@ inline void AYoloMSegCpuAchorFree(
     std::vector<uint8_t>& seg_drivable,
     std::vector<float*>& predict,
     std::shared_ptr<ParseMsgs>& parsemsgs) {
-    
+
     // seg drivable && lane
     auto seg_drivable_data = reinterpret_cast<uint32_t*>(predict[0]);
     auto seg_lane_data     = reinterpret_cast<uint32_t*>(predict[1]);
@@ -111,7 +111,7 @@ inline void AYoloMSegCpuAchorFree(
 
             if ( lane_int == 1 ) {
                 seg_lane[src_index] = uint8_t(lane_int);
-            } 
+            }
         }
     }
 }
@@ -124,7 +124,7 @@ inline void AYoloMDetectGpuAchorFree(
     std::vector<float*>& predict,
     std::vector<float*>& det_data_device,
     std::shared_ptr<ParseMsgs>& parsemsgs) {
-    
+
     int num_bboxes = parsemsgs->det_predict_dim_[0][1];
     int bbox_dim   = parsemsgs->det_predict_dim_[0][2];
     int num_classes= parsemsgs->class_num_;
@@ -164,7 +164,7 @@ inline void PostprocessAYoloMCpuAchorFree(
     std::vector<float*>& predict,
     std::shared_ptr<ParseMsgs>& parsemsgs) {
 
-    // bbox decode 
+    // bbox decode
     AYoloMDetectCpuAchorFree(infer_msg, multitask_result.box_result, predict, parsemsgs);
 
     // seg decode

@@ -37,7 +37,7 @@ bool DecodeProcessor::Init() {
   det_data_device_.resize(parsemsgs_->det_head_num_);
   det_data_host_.resize(parsemsgs_->det_head_num_);
   MemAllocator();
-  
+
   GLOG_INFO("[Init]: DecodeProcessor module init ");
   return true;
 }
@@ -125,9 +125,9 @@ bool DecodeProcessor::Inference(const std::vector<float*>& predict,
 /**
  * @description: Visualization
  */
-void DecodeProcessor::VisualizationDet(cv::Mat& img, 
+void DecodeProcessor::VisualizationDet(cv::Mat& img,
     vector<Box>& results) {
-  
+
   for (auto& box : results) {
     cv::Scalar color;
     tie(color[0], color[1], color[2]) = random_color(box.label);
@@ -144,9 +144,9 @@ void DecodeProcessor::VisualizationDet(cv::Mat& img,
 /**
  * @description: Visualization seg
  */
-void DecodeProcessor::VisualizationSeg(cv::Mat& img, 
+void DecodeProcessor::VisualizationSeg(cv::Mat& img,
   SegTask segmode, vector<uint8_t>& mask) {
-    
+
   auto pimage  = img.ptr<cv::Vec3b>(0);
   int img_size = img.cols * img.rows;
 
@@ -174,7 +174,7 @@ void DecodeProcessor::VisualizationSeg(cv::Mat& img,
  */
 void DecodeProcessor::VisualizationMultiTask(bool real_time,
     cv::Mat& img, int64_t timestamp, MultiTaskMsg& multitask_result) {
-  
+
   // od vis
   if ( parsemsgs_->detect_mode_ ) {
     VisualizationDet(img, multitask_result.box_result);

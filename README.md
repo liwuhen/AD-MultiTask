@@ -44,7 +44,7 @@ Visit our documentation to learn more.
 | ![Image 1](./docs/images/img_1.jpg) | ![Image 2](./docs/images/img_2.jpg) |
 |--------------------------------|--------------------------------|
 | ![Image 3](./docs/images/img_3.jpg) | ![Image 4](./docs/images/img_4.jpg) |
-- Dataset: 
+- Dataset:
     - BDD100K
         > The validation dataset is BDD100K, which contains 70000 training samples and 10000 val samples. All models in the table were trained on the full BDD100K dataset.
     - nuscenes
@@ -64,7 +64,7 @@ Welcome users to participate in these projects. Please refer to [CONTRIBUTING.md
 # ![TODO](https://img.shields.io/badge/how%20to%20contribute-project-brightgreen) TODO
 - [ ] Add YOLOP model
 - [ ] Add Thor platform support
-- [ ] Add quantization support to the model 
+- [ ] Add quantization support to the model
 - [ ] Add API support for versions greater than TRT 8.0
 
 # References

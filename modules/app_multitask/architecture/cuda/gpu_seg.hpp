@@ -16,4 +16,4 @@ void SemanticSeg(
     std::vector<uint8_t*>& seg_data_device,
     std::shared_ptr<ParseMsgs>& parsemsgs);
 
-#endif // APP_MULTITASK_GPU_SEG_H__ 
+#endif // APP_MULTITASK_GPU_SEG_H__

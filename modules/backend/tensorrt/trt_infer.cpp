@@ -29,7 +29,7 @@ TrtInfer::~TrtInfer() {}
  * @description: init．
  */
 bool TrtInfer::Init() {
-  
+
   if ((TrtVersion)parsemsgs_->trt_version_ == TrtVersion::TRT_LOWER_VERSION) {
     trt_lower_version_infer_ = createObject<TrtLowerVersionInfer>("TrtLowerVersionInfer");
     trt_lower_version_infer_->SetParam(parsemsgs_);
@@ -42,7 +42,7 @@ bool TrtInfer::Init() {
     GLOG_ERROR("[Init]: Trt infer module init failed ");
     return false;
   }
-  
+
   GLOG_INFO("[Init]: Trt infer module init ");
   return true;
 }
@@ -104,7 +104,7 @@ bool TrtInfer::Inference(float* output_img_device) {
     GLOG_ERROR("[Inference]: Trt infer module inference failed ");
     return false;
   }
-  
+
   return true;
 }
 

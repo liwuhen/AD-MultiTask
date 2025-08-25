@@ -16,4 +16,4 @@ void decode_kernel_invoker(float* predict, int num_bboxes,
                            Eigen::Matrix3f& invert_affine_matrix, float* parray,
                            int decode_bbox_dim, cudaStream_t stream);
 
-#endif // APP_MULTITASK_GPU_DECODE_H__ 
+#endif // APP_MULTITASK_GPU_DECODE_H__

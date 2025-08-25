@@ -29,7 +29,7 @@ static __device__ void affine_project(Eigen::Matrix3f& matrix, float x, float y,
 static __global__ void decode_kernel(  // 每次处理一个框，每个线程并行处理。
     float* predict, int num_bboxes, int num_classes, int bbox_dim, float confidence_threshold,
     Eigen::Matrix3f& invert_affine_matrix, float* parray, int max_objects, int decode_bbox_dim) {
-  
+
   volatile int position = (blockDim.x * blockIdx.x + threadIdx.x);  // 1D线程索引
   if (position >= num_bboxes) return;
 
@@ -90,10 +90,10 @@ void decode_kernel_invoker(float* predict, int num_bboxes,
                            int decode_bbox_dim, cudaStream_t stream) {
 
   // num_bboxes的数量框，则需要num_bboxes的线程数（一线程处理一个框）。
-  auto block = num_bboxes > 512 ? 512 : num_bboxes; 
+  auto block = num_bboxes > 512 ? 512 : num_bboxes;
   auto grid  = (num_bboxes + block - 1) / block;  // +block -1是向上取整数，保证系统设定的线程数大于程序的需要。
 
   decode_kernel<<<grid, block, 0, stream>>>(predict, num_bboxes, num_classes, bbox_dim,
-                                            confidence_threshold, invert_affine_matrix, 
+                                            confidence_threshold, invert_affine_matrix,
                                             parray, max_objects, decode_bbox_dim);
 }

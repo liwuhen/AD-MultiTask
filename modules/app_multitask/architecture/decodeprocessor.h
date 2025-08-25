@@ -135,7 +135,7 @@ class DecodeProcessor : public InferModuleBase {
    * @param[in] [cv::Mat&, vector<Box>&].
    * @return    void.
    */
-  void VisualizationSeg(cv::Mat& img, 
+  void VisualizationSeg(cv::Mat& img,
     SegTask segmode, vector<uint8_t>& mask);
 
   /**
@@ -143,7 +143,7 @@ class DecodeProcessor : public InferModuleBase {
    * @param[in] [bool, cv::Mat&, int64_t, vector<Box>&].
    * @return    void.
    */
-  void VisualizationMultiTask(bool real_time, 
+  void VisualizationMultiTask(bool real_time,
     cv::Mat& img, int64_t timestamp, MultiTaskMsg& multitask_result);
 
   /**

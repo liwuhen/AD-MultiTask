@@ -12,14 +12,19 @@ include_directories(
   ${CMAKE_PATH}/modules/common/utils
   ${CMAKE_PATH}/modules/common/msg_struct)
 
-file(GLOB_RECURSE CPP_SRCS 
-  ${PROJECT_SOURCE_DIR}/*.cpp)
+file(GLOB_RECURSE CPP_SRCS ${PROJECT_SOURCE_DIR}/*.cpp)
 
 add_executable(${PROJECT_NAME} ${CPP_SRCS})
 
 target_link_libraries(${PROJECT_NAME} ${MODEL_FLAG}_project)
-target_link_libraries(${PROJECT_NAME} opencv_core opencv_imgcodecs
-    opencv_imgproc opencv_highgui glog gflags)
+target_link_libraries(
+  ${PROJECT_NAME}
+  opencv_core
+  opencv_imgcodecs
+  opencv_imgproc
+  opencv_highgui
+  glog
+  gflags)
 
 set(EXECUTABLE_OUTPUT_PATH
     ${PROJECT_SOURCE_DIR}/${MODEL_FLAG}_bin/${COMPILER_DIR_FLAG})

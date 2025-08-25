@@ -74,7 +74,7 @@ class ParseMsgs {
   int dst_img_h_;        // Target image height
   int dst_img_c_;        // Target image channel
   int dstimg_size_;      // Target image size
-  int class_num_;        // Dataset calss num
+  int class_num_;        // Dataset class num
   int model_acc_;        // Model quantisation accuracy
   int branch_num_;       // Model branch number
   int trt_version_;      // Trt version

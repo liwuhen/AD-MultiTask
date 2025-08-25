@@ -10,16 +10,16 @@ common_config:
 
 model_config:
   multitask_type: [det, seg_drivable, seg_lane]
-  preprocess_module: 
+  preprocess_module:
     mode: 0  # 0-gpu, 1-cpu, 2-npu
     components: pre_a_yolom_gpu
-  postprocess_module: 
+  postprocess_module:
     mode: 0  # 0-gpu, 1-cpu, 2-npu
     components: post_a_yolom_gpu_anchorfree
   nms_type: nms_gpu
 
 inference_config:
-  trt_version: 0   # 0-lower version(<8.5), 1-high version(>=8.5) 
+  trt_version: 0   # 0-lower version(<8.5), 1-high version(>=8.5)
   model_acc: 0     # 0-fp32, 1-fp16, 2-int8
   batch_mode: 1    # 0-static batch, 1-dynamic batch
   input_msgdepth: 1000
@@ -48,7 +48,7 @@ predict_config:
   seg_head_num: 2
   decode_bbox_dim: 7  # left, top, right, bottom, confidence, class, keepflag
   det_predict_dim: [[1, 5292, 5]]
-  det_branchs_dim: [[1, 1, 48, 84],[1, 1, 24, 42],[1, 1, 12, 21]] 
+  det_branchs_dim: [[1, 1, 48, 84],[1, 1, 24, 42],[1, 1, 12, 21]]
   segda_predict_dim: [[1, 1, 384, 672]]  # seg drivable
   segll_predict_dim: [[1, 1, 384, 672]]  # seg lane
   max_objects: 60

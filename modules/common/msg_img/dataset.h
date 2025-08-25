@@ -130,8 +130,8 @@ static std::tuple<uint8_t, uint8_t, uint8_t> random_color(int id) {
   return hsv2bgr(h_plane, s_plane, 1);
 }
 
-static std::vector<std::vector<int>> selectColor = { 
-    { 0, 0, 0 }, { 0, 255, 0 }, { 255, 0, 0 }, { 0, 255, 255 } 
+static std::vector<std::vector<int>> selectColor = {
+    { 0, 0, 0 }, { 0, 255, 0 }, { 255, 0, 0 }, { 0, 255, 255 }
 };
 
 }  // namespace common

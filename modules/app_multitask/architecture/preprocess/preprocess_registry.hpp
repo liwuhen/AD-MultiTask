@@ -51,7 +51,7 @@ inline void CalAffineMatrix(cv::Mat& image,
     // Compute inverse
     cv::invertAffineTransform(input_msg.affineMatrix_cv, input_msg.affineMatrix_inv_cv);
     input_msg.affineMatrix_inv = input_msg.affineMatrix.inverse();
-    
+
 }
 
 /**

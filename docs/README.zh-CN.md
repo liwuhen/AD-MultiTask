@@ -41,12 +41,12 @@ Visit our documentation to learn more.
 - [Supported Object Tracking](./docs/hpcdoc/source/algorithm/Supported_Object_Tracking.md)
 
 # Performances
-- 数据集: 
+- 数据集:
     - BDD100K
         > 验证数据集为 BDD100K，其中包含 70,000 个训练样本和 10,000 个验证样本。表格中的所有模型均在完整的 BDD100K 数据集上进行了训练。
     - nuscenes
         > 验证数据集为 nuScenes-mini，表格中的所有模型均在完整的 nuScenes 数据集上进行了训练。
-- 模型：部署的模型为 YOLO 多任务网络系列中的 “s” 版本。
+- 模型：部署的模型为 YOLO 多任务网络系列中的 "s" 版本。
 - 量化：采用 NVIDIA 的后训练量化（Post-Training Quantization，PTQ）方法进行量化。
 
 |Model|Platform|Resolution|mAP50-95(fp32)|mAP50(fp32)|mAP50-95(fp16)|mAP50(fp16)|mAP50-95(int8)|mAP50(int8)|
