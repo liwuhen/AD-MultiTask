@@ -12,11 +12,9 @@ include_directories(
   ${CMAKE_PATH}/modules/benchmark
   ${CMAKE_PATH}/modules/common/json
   ${CMAKE_PATH}/modules/common/utils
-  ${CMAKE_PATH}/modules/common/logging
   ${CMAKE_PATH}/modules/common/msg_img
   ${CMAKE_PATH}/modules/common/msg_enum
   ${CMAKE_PATH}/modules/common/msg_struct)
-
 
 file(GLOB_RECURSE CPP_SRCS
   ${CMAKE_CURRENT_LIST_DIR}/*.cpp
@@ -24,8 +22,6 @@ file(GLOB_RECURSE CPP_SRCS
   ${CMAKE_PATH}/modules/app_multitask/architecture/template/*.cc
   ${CMAKE_PATH}/modules/common/logging/*.cpp
   ${CMAKE_PATH}/modules/common/json/*.cpp)
-
-link_libraries(${GFLAGS_DIR}/lib/libgflags.a ${GLOG_DIR}/lib/libglog.a)
 
 set(BACKEND backend_tensorrt)
 add_library(${BACKEND} SHARED ${CPP_SRCS})

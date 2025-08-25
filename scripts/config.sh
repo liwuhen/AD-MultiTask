@@ -49,11 +49,10 @@ MODEL_SETS=("yolop" "a_yolom")
 
 # compiler platform
 AARCM_FLAG=9.x
-PLATFORM_FLAG=NVIDIA
 HARDWARE_PLATFORM_FLAG=NONE
 PLATFORM_BOOL_FLAG=False
 PLATFORM_SETS=("NVIDIA" "QNN")
-HARDWARE_PLATFORM=("ORIN" "THOR")
+HARDWARE_PLATFORM=("NVIDIA" "ORIN" "THOR")
 
 function parse_args()
 {
@@ -111,7 +110,7 @@ Available model parameters are as follows:
     if [[ "$PLATFORM_BOOL_FLAG" == "False" ]] ; then
         echo -e "\e[1m\e[34m[Bash-Model-${TIME}]: parameters not in platform sets.
 Available platform parameters are as follows:
-    1) NVIDIA Orin X    2) NVIDIA Thor \e[0m"
+    1) NVIDIA PC X86    2) NVIDIA Orin X    3) NVIDIA Thor \e[0m"
         exit 1
     fi
     # check function

@@ -30,7 +30,7 @@ InferPipeline::~InferPipeline() {}
  * @description: init．
  */
 bool InferPipeline::Init() {
-  // InitLogging();
+  InitLogging();
 
   moduleMap_[ModuleType::MODULE_INFERENCE]   = std::make_shared<InferenceEngine>();
   moduleMap_[ModuleType::MODULE_POSTPROCESS] = std::make_shared<PostProcessor>();

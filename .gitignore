@@ -4,6 +4,8 @@ build_orin_x86/
 build_orin_arm/
 build_thor_x86/
 build_thor_arm/
+build_nv_x86/
+install_nvidia/
 install_orin/
 install_thor/
 .vscode/

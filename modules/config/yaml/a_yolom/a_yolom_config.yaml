@@ -19,7 +19,7 @@ model_config:
   nms_type: nms_gpu
 
 inference_config:
-  trt_version: 1   # 0-lower version(<8.5), 1-high version(>=8.5) 
+  trt_version: 0   # 0-lower version(<8.5), 1-high version(>=8.5) 
   model_acc: 0     # 0-fp32, 1-fp16, 2-int8
   batch_mode: 1    # 0-static batch, 1-dynamic batch
   input_msgdepth: 1000

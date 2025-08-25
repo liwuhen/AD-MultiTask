@@ -136,7 +136,6 @@ inline void PreprocessAYoloMCpu(
     std::shared_ptr<ParseMsgs>& parsemsgs) {
 
     cv::Mat input_image(parsemsgs->dst_img_h_, parsemsgs->dst_img_w_, CV_8UC3);
-    // 对图像做平移缩放旋转变换，可逆
     cv::warpAffine(input_msg.image, input_image, input_msg.affineMatrix_cv, input_image.size(), \
         cv::INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar::all(114));
 
@@ -148,7 +147,7 @@ inline void PreprocessAYoloMCpu(
     float* phost_g = input_data_host + image_area * 1;
     float* phost_r = input_data_host + image_area * 2;
     for (int i = 0; i < image_area; ++i, pimage += 3) {
-        // 注意这里的顺序 rgb 调换了
+        // BGR to RGB
         *phost_r++ = pimage[0] / 255.0f;
         *phost_g++ = pimage[1] / 255.0f;
         *phost_b++ = pimage[2] / 255.0f;

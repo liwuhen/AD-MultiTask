@@ -1,6 +1,6 @@
 string(TOLOWER "${HARDWARE_PLATFORM_FLAG}" HARDWARE_PLATFORM)
 set(APP_STR "" CACHE STRING "Application string version")
-if( ${HARDWARE_PLATFORM} STREQUAL "orin" )
+if( ${HARDWARE_PLATFORM} STREQUAL "orin" OR ${HARDWARE_PLATFORM} STREQUAL "nvidia" )
   set(APP_STR "9.x" CACHE STRING "Application string version" FORCE)
 else()
   set(APP_STR "12.x" CACHE STRING "Application string version" FORCE)
@@ -19,13 +19,8 @@ if ( ${ENABLE_CROSSCOMPILE} )
 else()
   set(COMPILER_DIR_FLAG x86)
   set(COMPILER_FLAG x86_toolchain)
-  if ( ${HARDWARE_PLATFORM} STREQUAL "orin" ) 
-    set(CUDA_TOOLKIT_ROOT_DIR "/usr/local/cuda-11.4/targets/x86_64-linux")
-    set(TENSORRT_DIR "/home/IM/${COMPILER_FLAG}/tensorrt8.4")
-  else()
-    set(CUDA_TOOLKIT_ROOT_DIR "/usr/local/cuda-12.8/targets/x86_64-linux")
-    set(TENSORRT_DIR "/home/IM/${COMPILER_FLAG}/tensorrt10.8")
-  endif()
+  set(CUDA_TOOLKIT_ROOT_DIR "/usr/local/cuda-11.4/targets/x86_64-linux")
+  set(TENSORRT_DIR "/home/IM/${COMPILER_FLAG}/tensorrt8.4")
 endif()
 
 set(GLOG_DIR "/home/IM/${COMPILER_FLAG}/glog0.6.0")
@@ -43,10 +38,6 @@ include_directories(
   ${TENSORRT_DIR}/include
   ${CUDA_TOOLKIT_ROOT_DIR}/include)
 
-# link_directories(
-#   ${GFLAGS_DIR}/lib ${GLOG_DIR}/lib  ${OPENCV_DIR}/lib_${APP_STR} ${YAMLCPP_DIR}/lib
-#   ${TENSORRT_DIR}/lib/stubs ${CUDA_TOOLKIT_ROOT_DIR}/lib)
-
 link_directories(
   ${OPENCV_DIR}/lib_${APP_STR} ${YAMLCPP_DIR}/lib
-  ${TENSORRT_DIR}/lib/stubs ${CUDA_TOOLKIT_ROOT_DIR}/lib)
+  ${GFLAGS_DIR}/lib ${GLOG_DIR}/lib ${TENSORRT_DIR}/lib/stubs ${CUDA_TOOLKIT_ROOT_DIR}/lib)

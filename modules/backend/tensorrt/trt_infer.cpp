@@ -29,7 +29,6 @@ TrtInfer::~TrtInfer() {}
  * @description: init．
  */
 bool TrtInfer::Init() {
-  InitLogging();
   
   if ((TrtVersion)parsemsgs_->trt_version_ == TrtVersion::TRT_LOWER_VERSION) {
     trt_lower_version_infer_ = createObject<TrtLowerVersionInfer>("TrtLowerVersionInfer");

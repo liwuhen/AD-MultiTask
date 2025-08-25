@@ -30,7 +30,7 @@ InferenceEngine::~InferenceEngine() {}
  * @description: init．
  */
 bool InferenceEngine::Init() {
-  this->trtInfer_  = std::make_shared<TrtInfer>();
+  trtInfer_        = std::make_shared<TrtInfer>();
   preProcessor_    = std::make_shared<PreProcessor>();
   decodeProcessor_ = std::make_shared<DecodeProcessor>();
   trtInfer_->SetParam(parsemsgs_);

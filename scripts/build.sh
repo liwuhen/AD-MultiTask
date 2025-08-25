@@ -48,14 +48,12 @@ if [ "${CROSS_COMPILE}" == "ON" ] ; then
     esac
     COMM_ARGS="${COMM_ARGS} -DENABLE_CROSSCOMPILE=ON -DAARCM_FLAG=${AARCM_FLAG}"
 elif [ "${PC_X86_FLAG}" == "ON" ] ; then
-    if [ "${HARDWARE_PLATFORM_FLAG}" == "ORIN" ] ; then
-        BUILD_DIR=${HOME_DIR}/build_orin_x86
-    elif [ "${HARDWARE_PLATFORM_FLAG}" == "THOR" ] ; then
-        BUILD_DIR=${HOME_DIR}/build_thor_x86
+    if [ "${HARDWARE_PLATFORM_FLAG}" == "NVIDIA" ] ; then
+        BUILD_DIR=${HOME_DIR}/build_nv_x86
     fi
 fi
 
-echo -e "\e[1m\e[34m[Bash-Platform-${TIME}]: compiler platform: ${PLATFORM_FLAG}-${HARDWARE_PLATFORM_FLAG} \e[0m"
+echo -e "\e[1m\e[34m[Bash-Platform-${TIME}]: compiler platform: ${HARDWARE_PLATFORM_FLAG} \e[0m"
 
 if [ "${CLEAN_FLAG}" == "ON" ] ; then
     rm -rf "${BUILD_DIR}"

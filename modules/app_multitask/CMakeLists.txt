@@ -31,7 +31,6 @@ include_directories(
   ${CMAKE_PATH}/modules/common/json
   ${CMAKE_PATH}/modules/common/utils
   ${CMAKE_PATH}/modules/common/module
-  ${CMAKE_PATH}/modules/common/logging
   ${CMAKE_PATH}/modules/common/msg_img
   ${CMAKE_PATH}/modules/common/template
   ${CMAKE_PATH}/modules/common/msg_enum
@@ -46,8 +45,8 @@ file(
   ${CMAKE_CURRENT_LIST_DIR}/architecture/*.cpp
   ${CMAKE_CURRENT_LIST_DIR}/architecture/cuda/*.cpp
   ${CMAKE_CURRENT_LIST_DIR}/architecture/decode/*.cpp
-  ${CMAKE_PATH}/modules/common/logging/*.cpp
   ${CMAKE_PATH}/modules/common/json/*.cpp
+  ${CMAKE_PATH}/modules/common/logging/*.cpp
   ${CMAKE_PATH}/modules/common/template/*.cc
   ${CMAKE_PATH}/modules/common/appconfig/*.cc)
 
