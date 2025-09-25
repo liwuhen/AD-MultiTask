@@ -432,6 +432,13 @@ bool TrtLowerVersionInfer::MemFree() {
 }
 
 /**
+ * @description: Get output buffer.
+ */
+const std::vector<float*>& TrtLowerVersionInfer::GetOutputBuffer() const {
+  return output_buffers_;
+}
+
+/**
  * @description: Load file.
  */
 std::vector<uint8_t> TrtLowerVersionInfer::LoadFile(const string& file) {

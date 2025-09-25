@@ -33,7 +33,7 @@
 #include "common.hpp"
 #include "enum_msg.h"
 #include "logger.h"
-#include "module.h"
+#include "backend_module.h"
 #include "parseconfig.h"
 #include "std_buffer.h"
 #include "std_cmake.h"
@@ -60,7 +60,7 @@ using namespace hpc::common;
  * @class TrtLowerVersionInfer.
  * @brief Trt lower version model infer.
  */
-class TrtLowerVersionInfer : public InferModuleBase {
+class TrtLowerVersionInfer : public BackendModuleBase {
  public:
   TrtLowerVersionInfer();
   ~TrtLowerVersionInfer();
@@ -94,6 +94,20 @@ class TrtLowerVersionInfer : public InferModuleBase {
   bool RunRelease() override;
 
   /**
+   * @brief     Cpu and gpu memory free.
+   * @param[in] void．
+   * @return    bool.
+   */
+  bool MemFree() override;
+
+  /**
+   * @brief     Inference.
+   * @param[in] float*.
+   * @return    bool.
+   */
+  bool Inference(float* output_img_device);
+
+  /**
    * @brief     Configuration parameters.
    * @param[in] shared_ptr<ParseMsgs>&.
    * @return    bool.
@@ -101,11 +115,11 @@ class TrtLowerVersionInfer : public InferModuleBase {
   bool SetParam(shared_ptr<ParseMsgs>& parse_msgs) override;
 
   /**
-   * @brief     Cpu and gpu memory free.
+   * @brief     Get output buffer.
    * @param[in] void．
-   * @return    bool.
+   * @return    const std::vector<float*>&.
    */
-  bool MemFree();
+  const std::vector<float*>& GetOutputBuffer() const override;
 
   /**
    * @brief     Load file.
@@ -120,13 +134,6 @@ class TrtLowerVersionInfer : public InferModuleBase {
    * @return    bool.
    */
   void LoadCalibDataFile(const std::string& path, std::vector<string>& data);
-
-  /**
-   * @brief     Inference.
-   * @param[in] float*.
-   * @return    bool.
-   */
-  bool Inference(float* output_img_device);
 
  private:
   /**

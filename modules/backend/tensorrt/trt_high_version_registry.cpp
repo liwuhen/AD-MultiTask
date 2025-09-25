@@ -438,6 +438,13 @@ bool TrtHighVersionInfer::MemFree() {
 }
 
 /**
+ * @description: Get output buffer.
+ */
+const std::vector<float*>& TrtHighVersionInfer::GetOutputBuffer() const {
+  return output_buffers_;
+}
+
+/**
  * @description: Load file.
  */
 std::vector<uint8_t> TrtHighVersionInfer::LoadFile(const string& file) {

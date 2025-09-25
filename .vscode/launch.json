@@ -12,7 +12,7 @@
             "environment": [
                 {
                     "name": "LD_LIBRARY_PATH",
-                    "value": "${workspaceFolder}/install_nvidia/a_yolom_bin/x86/proprecessor:${workspaceFolder}/install_nvidia/a_yolom_bin/x86/postprecessor:${workspaceFolder}/install_nvidia/a_yolom_bin/x86/libs:${workspaceFolder}/install_nvidia/a_yolom_bin/x86/third_party/opencv:/home/IM/x86_toolchain/tensorrt/lib:${env:LD_LIBRARY_PATH}"
+                    "value": "${workspaceFolder}/install_nvidia/a_yolom_bin/x86/libs:${workspaceFolder}/install_nvidia/a_yolom_bin/x86/third_party/opencv:/home/IM/x86_toolchain/tensorrt8.4/lib:${env:LD_LIBRARY_PATH}"
                 }
             ],
             "externalConsole": false,

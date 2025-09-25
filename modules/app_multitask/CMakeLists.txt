@@ -65,12 +65,12 @@ cuda_add_library(
 
 set_target_properties(
   ${MODEL_FLAG}_gpu_preprocessor
-  PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${PROCESSOR_OUTPUT_DIR}"
+  PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${LIBS}"
              OUTPUT_NAME "${MODEL_FLAG}_gpu_preprocessor")
 
 set_target_properties(
   ${MODEL_FLAG}_gpu_decode
-  PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${POSTPRECESSOR_OUTPUT_DIR}"
+  PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${LIBS}"
              OUTPUT_NAME "${MODEL_FLAG}_gpu_decode")
 
 add_library(${PROJECT_NAME} SHARED ${CPP_SRCS})
@@ -88,7 +88,3 @@ set_target_properties(
 include(${CMAKE_SOURCE_DIR}/cmake/install-toolchain.cmake)
 
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${LIBS})
-install(TARGETS ${MODEL_FLAG}_gpu_decode
-        LIBRARY DESTINATION ${POSTPRECESSOR_OUTPUT_DIR})
-install(TARGETS ${MODEL_FLAG}_gpu_preprocessor
-        LIBRARY DESTINATION ${PROCESSOR_OUTPUT_DIR})

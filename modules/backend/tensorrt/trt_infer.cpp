@@ -31,13 +31,13 @@ TrtInfer::~TrtInfer() {}
 bool TrtInfer::Init() {
 
   if ((TrtVersion)parsemsgs_->trt_version_ == TrtVersion::TRT_LOWER_VERSION) {
-    trt_lower_version_infer_ = createObject<TrtLowerVersionInfer>("TrtLowerVersionInfer");
-    trt_lower_version_infer_->SetParam(parsemsgs_);
-    trt_lower_version_infer_->Init();
+    backend_trt_infer_ = createObject<TrtLowerVersionInfer>("TrtLowerVersionInfer");
+    backend_trt_infer_->SetParam(parsemsgs_);
+    backend_trt_infer_->Init();
   } else if ((TrtVersion)parsemsgs_->trt_version_ == TrtVersion::TRT_HIGH_VERSION) {
-    trt_high_version_infer_  = createObject<TrtHighVersionInfer>("TrtHighVersionInfer");
-    trt_high_version_infer_->SetParam(parsemsgs_);
-    trt_high_version_infer_->Init();
+    backend_trt_infer_  = createObject<TrtHighVersionInfer>("TrtHighVersionInfer");
+    backend_trt_infer_->SetParam(parsemsgs_);
+    backend_trt_infer_->Init();
   } else {
     GLOG_ERROR("[Init]: Trt infer module init failed ");
     return false;
@@ -90,17 +90,14 @@ bool TrtInfer::SetParam(shared_ptr<ParseMsgs>& parse_msgs) {
 /**
  * @description: Module resource release.
  */
-bool TrtInfer::DataResourceRelease() {}
+bool TrtInfer::DataResourceRelease() {
+}
 
 /**
  * @description: Inference.
  */
 bool TrtInfer::Inference(float* output_img_device) {
-  if ((TrtVersion)parsemsgs_->trt_version_ == TrtVersion::TRT_LOWER_VERSION) {
-    trt_lower_version_infer_->Inference(output_img_device);
-  } else if ((TrtVersion)parsemsgs_->trt_version_ == TrtVersion::TRT_HIGH_VERSION) {
-    trt_high_version_infer_->Inference(output_img_device);
-  } else {
+  if ( !backend_trt_infer_->Inference(output_img_device) ) {
     GLOG_ERROR("[Inference]: Trt infer module inference failed ");
     return false;
   }
@@ -112,11 +109,7 @@ bool TrtInfer::Inference(float* output_img_device) {
  * @description: Get output buffer.
  */
 const std::vector<float*>& TrtInfer::GetOutputBuffer() const {
-  if ((TrtVersion)parsemsgs_->trt_version_ == TrtVersion::TRT_LOWER_VERSION) {
-    return trt_lower_version_infer_->output_buffers_;
-  } else if ((TrtVersion)parsemsgs_->trt_version_ == TrtVersion::TRT_HIGH_VERSION) {
-    return trt_high_version_infer_->output_buffers_;
-  }
+  return backend_trt_infer_->GetOutputBuffer();
 }
 
 /**
@@ -124,11 +117,7 @@ const std::vector<float*>& TrtInfer::GetOutputBuffer() const {
  */
 bool TrtInfer::MemFree() {
   // free memory
-  if ((TrtVersion)parsemsgs_->trt_version_ == TrtVersion::TRT_LOWER_VERSION) {
-    trt_lower_version_infer_->MemFree();
-  } else if ((TrtVersion)parsemsgs_->trt_version_ == TrtVersion::TRT_HIGH_VERSION) {
-    trt_high_version_infer_->MemFree();
-  } else {
+  if ( !backend_trt_infer_->MemFree() ) {
     GLOG_ERROR("[MemFree]: Trt infer module mem free failed ");
     return false;
   }
