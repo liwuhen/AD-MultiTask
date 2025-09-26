@@ -69,9 +69,8 @@ set_target_properties(
              OUTPUT_NAME "${MODEL_FLAG}_gpu_preprocessor")
 
 set_target_properties(
-  ${MODEL_FLAG}_gpu_decode
-  PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${LIBS}"
-             OUTPUT_NAME "${MODEL_FLAG}_gpu_decode")
+  ${MODEL_FLAG}_gpu_decode PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${LIBS}"
+                                      OUTPUT_NAME "${MODEL_FLAG}_gpu_decode")
 
 add_library(${PROJECT_NAME} SHARED ${CPP_SRCS})
 
