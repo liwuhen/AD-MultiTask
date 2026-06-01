@@ -65,10 +65,10 @@ Shell scripts provide optional platforms.
 ```shell
 #!/bin/bash
 - x86
-bash ./scripts/build.sh yolov5 nvidia  -x86 -pack -clean
+bash ./scripts/build.sh a_yolom nvidia  -x86 -pack -clean
 
 - arm
-bash ./scripts/build.sh yolov5 nvidia  -arm -pack -clean
+bash ./scripts/build.sh a_yolom nvidia  -arm -pack -clean
 ```
 
 ### 1.4 program execution
@@ -77,8 +77,8 @@ bash ./scripts/build.sh yolov5 nvidia  -arm -pack -clean
 ```shell
 #!/bin/bash
 - x86
-bash ./install_nvidia/run.sh yolov5 nvidia
+bash ./install_nvidia/run.sh a_yolom nvidia
 
 - arm
-bash ./install_nvidia/run.sh yolov5 nvidia -arm
+bash ./install_nvidia/run.sh a_yolom nvidia -arm
 ```
